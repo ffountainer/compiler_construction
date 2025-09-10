@@ -17,7 +17,7 @@ class Program
         while (!_streamReader.EndOfStream)
         {
             Token newToken = lexer.GetNextToken();
-            Console.WriteLine("Tk: " + newToken.GetType().Name + " | " + newToken.GetSourceText());
+            Console.WriteLine("Tk: " + newToken.GetType().Name + " | \"" + newToken.GetSourceText() + "\"");
         }
         
         _fileStream.Close();

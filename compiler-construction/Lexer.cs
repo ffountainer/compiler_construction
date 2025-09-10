@@ -37,7 +37,7 @@ public class Lexer
 
             character = (char)readValue;
             
-            if (!char.IsWhiteSpace(character))
+            if (!IsWhiteSpace(character))
             {
                 spaces = false;
                 _streamReader.Read();
@@ -164,7 +164,9 @@ public class Lexer
                     }
                     return new Point(".");
                 case ';':
-                    return new Semicolon(";");
+                    return new StatementSeparator(";");
+                case '\n':
+                    return new StatementSeparator("\\n");
                 case char ch when (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'):
                     bool text = true;
                     var str = character.ToString();
@@ -178,12 +180,12 @@ public class Lexer
 
                         var newChar = (char)readChar;
 
-                        if (";,:=>.</([{}])".Contains(newChar))
+                        if (";,:=>.</([{}])\n".Contains(newChar))
                         { 
                             return checkKeyword(str);
                         }
 
-                        if (char.IsWhiteSpace(newChar))
+                        if (IsWhiteSpace(newChar))
                         {
                             return checkKeyword(str);
                         }
@@ -203,7 +205,7 @@ public class Lexer
                         
                         var newChar = (char)readChar;
 
-                        if (";,:=>< /}]+-*)".Contains(newChar) || readChar == -1 || char.IsWhiteSpace(newChar))
+                        if (";,:=>< /}]+-*)\n".Contains(newChar) || readChar == -1 || IsWhiteSpace(newChar))
                         {
                             number = false;
                             if (isReal)
@@ -260,7 +262,7 @@ public class Lexer
         while (quote_not_finished)
         {
             var readChar = _streamReader.Read();
-            if (readChar == -1)
+            if (readChar == -1 || readChar == '\n')
             {
                 throw new Exception("Error: unclosed string");
             }
@@ -303,5 +305,10 @@ public class Lexer
             case "func": return new Func(str);
             default: return new Identifier(str);
         }
+    }
+
+    private bool IsWhiteSpace(char c)
+    {
+        return c != '\n' && char.IsWhiteSpace(c);
     }
 }

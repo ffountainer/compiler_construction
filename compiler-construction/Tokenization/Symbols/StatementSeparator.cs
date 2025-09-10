@@ -1,8 +1,8 @@
 namespace compiler_construction.Tokenization.Symbols;
 
-public class Semicolon : Token
+public class StatementSeparator : Token
 {
-    public Semicolon(string representation)
+    public StatementSeparator(string representation)
     {
         this.sourceText = representation;
     }

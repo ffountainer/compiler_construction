@@ -7,4 +7,4 @@ print d is int
 print e is none
 print f is none
 print g is real
-print h is string 
+print h is string
