@@ -6,6 +6,7 @@ using Tokenization.BoundingOperators;
 using Tokenization.Keywords;
 using Tokenization.Operators;
 using Tokenization.Symbols;
+using System.Globalization;
 
 class Program
 {
@@ -20,7 +21,7 @@ class Program
 
         while (!_streamReader.EndOfStream)
         {
-            Console.Write(Lexer());
+            Console.WriteLine(Lexer());
         }
         
         _fileStream.Close();
@@ -42,9 +43,11 @@ class Program
             }
 
             character = (char)readValue;
+            
             if (!char.IsWhiteSpace(character))
             {
                 spaces = false;
+                _streamReader.Read();
             }
             else 
             {
@@ -68,11 +71,9 @@ class Program
                 case ']':
                     return new RightBracket();
                 case '"':
-                    checkQuote();
-                    break;
+                    return checkQuote();
                 case '\'':
-                    checkQuote();
-                    break;
+                    return checkQuote();
                 case '/':
                     var readCh3 = _streamReader.Peek();
                     if (readCh3 == -1)
@@ -193,9 +194,9 @@ class Program
                         }
 
                         str += newChar;
+                        _streamReader.Read();
 
                     }
-
                     break;
                 case char ch when (ch >= '0' && ch <= '9'):
                     bool number = true;
@@ -207,12 +208,12 @@ class Program
                         
                         var newChar = (char)readChar;
 
-                        if (";,:=>< /}])".Contains(newChar) || readChar == -1 || char.IsWhiteSpace(newChar))
+                        if (";,:=>< /}]+-*)".Contains(newChar) || readChar == -1 || char.IsWhiteSpace(newChar))
                         {
                             number = false;
                             if (isReal)
                             {
-                                return new Real(float.Parse(value));
+                                return new Real(float.Parse(value, CultureInfo.InvariantCulture));
                             }
                             else
                             {
@@ -223,17 +224,16 @@ class Program
                         if (newChar == '.')
                         {
                             isReal = true;
-                            value += newChar;
                         }
-                        var extra = _streamReader.Read();
                         value += newChar;
+                        _streamReader.Read();
                     }
 
                     break;
                     
         }
 
-        return new Semicolon();
+        return new FinishProgram();
     }
 
     private static Token checkQuote()
@@ -279,6 +279,11 @@ class Program
             case "var" : return new Var();
             case "while": return new While();
             case "xor" : return new Xor();
+            case "bool" : return new BoolKeyword();
+            case "int": return new IntKeyword();
+            case "none" : return new NoneKeyword();
+            case "real" : return new RealKeyword();
+            case "string": return new StringKeyword();
             default: return new Identifier();
         }
     }
