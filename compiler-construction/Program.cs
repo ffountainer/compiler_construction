@@ -12,6 +12,7 @@ class Program
 {
     private static FileStream _fileStream;
     private static StreamReader _streamReader;
+    private static Token _nextToken = null;
     
     private static void Main(string[] args)
     {
@@ -22,7 +23,7 @@ class Program
         while (!_streamReader.EndOfStream)
         {
             Token newToken = Lexer();
-            Console.WriteLine(newToken.GetType().Name + " " + newToken.GetSourceText());
+            Console.WriteLine("Tk: " + newToken.GetType().Name + " | " + newToken.GetSourceText());
         }
         
         _fileStream.Close();
@@ -58,8 +59,15 @@ class Program
         }
 
         string sourceText = character.ToString();
-        
 
+        
+        if (_nextToken != null)
+        {
+            var retValue = _nextToken;
+            _nextToken = null;
+            return retValue;
+        }
+        
         switch (character)
             {
                 case '(':
@@ -82,7 +90,6 @@ class Program
                     var readCh3 = _streamReader.Peek();
                     if (readCh3 == -1)
                     {
-                        Console.Write("File ended");
                         break;
                     }
                     var newCh3 = (char)readCh3;
@@ -96,7 +103,6 @@ class Program
                     var readCh6 = _streamReader.Peek();
                     if (readCh6 == -1)
                     {
-                        Console.Write("File ended");
                         break;
                     }
                     var newCh6 = (char)readCh6;
@@ -110,7 +116,6 @@ class Program
                     var readCh = _streamReader.Peek();
                     if (readCh == -1)
                     {
-                        Console.Write("File ended");
                         break;
                     }
                     var newCh = (char)readCh;
@@ -124,7 +129,6 @@ class Program
                     var readCh2 = _streamReader.Peek();
                     if (readCh2 == -1)
                     {
-                        Console.Write("File ended");
                         break;
                     }
                     var newCh2 = (char)readCh2;
@@ -144,7 +148,6 @@ class Program
                     var readCh5 = _streamReader.Peek();
                     if (readCh5 == -1)
                     {
-                        Console.Write("File ended");
                         break;
                     }
                     var newCh5 = (char)readCh5;
@@ -153,7 +156,6 @@ class Program
                         var extra = _streamReader.Read();
                         return new ColonEqual(":=");
                     }
-                    Console.Write("Weird :");
                     break;
                 case ',':
                     return new Comma(",");
@@ -161,7 +163,6 @@ class Program
                     var readCh7 = _streamReader.Peek();
                     if (readCh7 == -1)
                     {
-                        Console.Write("File ended");
                         break;
                     }
                     var newCh7 = (char)readCh7;
@@ -181,13 +182,12 @@ class Program
                         var readChar = _streamReader.Peek();
                         if (readChar == -1)
                         {
-                            Console.Write("File ended");
                             return checkKeyword(str);
                         }
 
                         var newChar = (char)readChar;
 
-                        if (";,:=>.</}])".Contains(newChar))
+                        if (";,:=>.</([{}])".Contains(newChar))
                         { 
                             return checkKeyword(str);
                         }
@@ -224,13 +224,35 @@ class Program
                                 return new Int(value, Int32.Parse(value));
                             }
                         }
-
                         if (newChar == '.')
                         {
-                            isReal = true;
+                            _streamReader.Read();
+                            var checkIfRange = _streamReader.Peek();
+                            var check = (char)checkIfRange;
+                            if (check != '.')
+                            {
+                                isReal = true;
+                                value += newChar;
+                                value += check;
+                                _streamReader.Read();
+                                
+                            }
+                            else
+                            {
+                                _nextToken = new Range("..");
+                                number = false;
+                                return new Int(value, Int32.Parse(value));
+                            }
+
                         }
-                        value += newChar;
-                        _streamReader.Read();
+                        else
+                        {
+                            value += newChar;
+                            _streamReader.Read();
+                        }
+                        
+                        
+                        
                     }
 
                     break;
@@ -288,6 +310,7 @@ class Program
             case "none" : return new NoneKeyword(str);
             case "real" : return new RealKeyword(str);
             case "string": return new StringKeyword(str);
+            case "func": return new Func(str);
             default: return new Identifier(str);
         }
     }
