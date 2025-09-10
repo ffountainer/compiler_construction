@@ -5,7 +5,6 @@ public enum old
     
     Identifier,
     
-    // Type
     Int,
     Real,
     Bool,
@@ -26,6 +25,8 @@ public enum old
     Exit,
     Return,
     Print,
+    Is,
+    Not,
     
     // bounding operator
     // enum + flag
@@ -38,16 +39,20 @@ public enum old
     Quote,
     
     
+    // operators
     Or,
     And,
     Xor,
-    
     LESS,
     GREATER,
     LESS_EQUAL,
     GREATER_EQUAL,
     EQUAL,
     NOT_EQUAL,
+    PLUS,
+    MINUS,
+    MULTIPLY,
+    DIVIDE,
     
     
     COLON_EQUAL,
@@ -55,14 +60,6 @@ public enum old
     SEMICOLON,
     COMMA,
     POINT,
-    
-    PLUS,
-    MINUS,
-    MULTIPLY,
-    DIVIDE,
-    IS,
-    NOT,
-    
     
     
 }

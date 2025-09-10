@@ -1,6 +1,11 @@
 ﻿namespace compiler_construction;
 
 using Tokenization;
+using Tokenization.Types;
+using Tokenization.BoundingOperators;
+using Tokenization.Keywords;
+using Tokenization.Operators;
+using Tokenization.Symbols;
 
 class Program
 {
@@ -17,7 +22,7 @@ class Program
         // ..
     }
     
-    private static old Lexer()
+    private static Token Lexer()
     {
         var currentToken = "";
         var loop = true;
@@ -53,6 +58,6 @@ class Program
         }
         Console.Write(currentToken);
 
-        return old.Bool;
+        return new Semicolon();
     }
 }
