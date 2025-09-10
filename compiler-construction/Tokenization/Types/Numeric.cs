@@ -2,16 +2,12 @@ namespace compiler_construction.Tokenization.Types;
 
 public abstract class Numeric<T> : Token
 {
-    private T value;
+    protected T value;
     
-    public Numeric(T givenValue)
+    public Numeric(string representation, T givenValue)
     {
         this.value = givenValue;
-    }
-
-    protected Numeric()
-    {
-        this.value = default(T);
+        this.sourceText = representation;
     }
 
     public void SetValue(T givenValue)
@@ -19,7 +15,7 @@ public abstract class Numeric<T> : Token
         this.value = givenValue;
     }
     
-    public T getValue()
+    public T GetValue()
     {
         return this.value;
     }

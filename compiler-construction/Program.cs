@@ -21,7 +21,8 @@ class Program
 
         while (!_streamReader.EndOfStream)
         {
-            Console.WriteLine(Lexer());
+            Token newToken = Lexer();
+            Console.WriteLine(newToken.GetType().Name + " " + newToken.GetSourceText());
         }
         
         _fileStream.Close();
@@ -56,20 +57,23 @@ class Program
 
         }
 
+        string sourceText = character.ToString();
+        
+
         switch (character)
             {
                 case '(':
-                    return new LeftBrace();
+                    return new LeftBrace(sourceText);
                 case ')':
-                    return new RightBrace();
+                    return new RightBrace(sourceText);
                 case '{':
-                    return new LeftCurlyBrace();
+                    return new LeftCurlyBrace(sourceText);
                 case '}':
-                    return new RightCurlyBrace();
+                    return new RightCurlyBrace(sourceText);
                 case '[':
-                    return new LeftBracket();
+                    return new LeftBracket(sourceText);
                 case ']':
-                    return new RightBracket();
+                    return new RightBracket(sourceText);
                 case '"':
                     return checkQuote();
                 case '\'':
@@ -85,9 +89,9 @@ class Program
                     if (newCh3 == '=')
                     {
                         var extra = _streamReader.Read();
-                        return new NotEqual();
+                        return new NotEqual("/=");
                     }
-                    return new Divide();
+                    return new Divide("/");
                 case '=':
                     var readCh6 = _streamReader.Peek();
                     if (readCh6 == -1)
@@ -99,9 +103,9 @@ class Program
                     if (newCh6 == '>')
                     {
                         var extra = _streamReader.Read();
-                        return new EqualGreater();
+                        return new EqualGreater("=>");
                     }
-                    return new Equal();
+                    return new Equal("=");
                 case '>':
                     var readCh = _streamReader.Peek();
                     if (readCh == -1)
@@ -113,9 +117,9 @@ class Program
                     if (newCh == '=')
                     {
                         var extra = _streamReader.Read();
-                        return new GreaterEqual();
+                        return new GreaterEqual(">=");
                     }
-                    return new Greater();
+                    return new Greater(">");
                 case '<':
                     var readCh2 = _streamReader.Peek();
                     if (readCh2 == -1)
@@ -127,15 +131,15 @@ class Program
                     if (newCh2 == '=')
                     {
                         var extra = _streamReader.Read();
-                        return new LessEqual();
+                        return new LessEqual("<=");
                     }
-                    return new Less();
+                    return new Less("<");
                 case '-':
-                    return new Minus();
+                    return new Minus("-");
                 case '+':
-                    return new Plus();
+                    return new Plus("+");
                 case '*':
-                    return new Times();
+                    return new Times("*");
                 case ':':
                     var readCh5 = _streamReader.Peek();
                     if (readCh5 == -1)
@@ -147,12 +151,12 @@ class Program
                     if (newCh5 == '=')
                     {
                         var extra = _streamReader.Read();
-                        return new ColonEqual();
+                        return new ColonEqual(":=");
                     }
                     Console.Write("Weird :");
                     break;
                 case ',':
-                    return new Comma();
+                    return new Comma(",");
                 case '.':
                     var readCh7 = _streamReader.Peek();
                     if (readCh7 == -1)
@@ -164,11 +168,11 @@ class Program
                     if (newCh7 == '.')
                     {
                         var extra = _streamReader.Read();
-                        return new Range();
+                        return new Range("..");
                     }
-                    return new Point();
+                    return new Point(".");
                 case ';':
-                    return new Semicolon();
+                    return new Semicolon(";");
                 case char ch when (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'):
                     bool text = true;
                     var str = character.ToString();
@@ -183,7 +187,7 @@ class Program
 
                         var newChar = (char)readChar;
 
-                        if (";.,:=>< /}])".Contains(newChar))
+                        if (";,:=>.</}])".Contains(newChar))
                         { 
                             return checkKeyword(str);
                         }
@@ -213,11 +217,11 @@ class Program
                             number = false;
                             if (isReal)
                             {
-                                return new Real(float.Parse(value, CultureInfo.InvariantCulture));
+                                return new Real(value, float.Parse(value, CultureInfo.InvariantCulture));
                             }
                             else
                             {
-                                return new Int(Int32.Parse(value));
+                                return new Int(value, Int32.Parse(value));
                             }
                         }
 
@@ -252,7 +256,7 @@ class Program
             if (newChar == '"' || newChar == '\'')
             {
                 quote_not_finished = false;
-                return new String(str);
+                return new String(newChar + str + newChar, str);
             }
             str += newChar;
         }
@@ -262,29 +266,29 @@ class Program
     private static Token checkKeyword(string str)
     {
         switch (str) {
-            case "and": return new And();
-            case "else" : return new Else();
-            case "end" : return new End();
-            case "exit": return new Exit();
-            case "for" : return new For();
-            case "if" : return new If();
-            case "in": return new In();
-            case "is" : return new Is();
-            case "loop" : return new Loop();
-            case "not": return new Not();
-            case "or" : return new Or();
-            case "print" : return new Print();
-            case "return": return new Return();
-            case "then" : return new Then();
-            case "var" : return new Var();
-            case "while": return new While();
-            case "xor" : return new Xor();
-            case "bool" : return new BoolKeyword();
-            case "int": return new IntKeyword();
-            case "none" : return new NoneKeyword();
-            case "real" : return new RealKeyword();
-            case "string": return new StringKeyword();
-            default: return new Identifier();
+            case "and": return new And(str);
+            case "else" : return new Else(str);
+            case "end" : return new End(str);
+            case "exit": return new Exit(str);
+            case "for" : return new For(str);
+            case "if" : return new If(str);
+            case "in": return new In(str);
+            case "is" : return new Is(str);
+            case "loop" : return new Loop(str);
+            case "not": return new Not(str);
+            case "or" : return new Or(str);
+            case "print" : return new Print(str);
+            case "return": return new Return(str);
+            case "then" : return new Then(str);
+            case "var" : return new Var(str);
+            case "while": return new While(str);
+            case "xor" : return new Xor(str);
+            case "bool" : return new BoolKeyword(str);
+            case "int": return new IntKeyword(str);
+            case "none" : return new NoneKeyword(str);
+            case "real" : return new RealKeyword(str);
+            case "string": return new StringKeyword(str);
+            default: return new Identifier(str);
         }
     }
 }
