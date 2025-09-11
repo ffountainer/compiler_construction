@@ -9,7 +9,7 @@ class Program
     
     private static void Main(string[] args)
     {
-        string path = "../../../code.d";
+        string path = "../../../tests/tuples/test4.d";
         _fileStream =  new FileStream(path, FileMode.Open);
         _streamReader = new StreamReader(_fileStream);
         Lexer lexer = new Lexer(path, _streamReader);
