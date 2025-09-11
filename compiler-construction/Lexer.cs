@@ -180,8 +180,9 @@ public class Lexer
 
                         var newChar = (char)readChar;
 
-                        if (";,:=>.</([{}])\n".Contains(newChar))
-                        { 
+                        if (!((newChar >= 'a' && newChar <= 'z') || (newChar >= 'A' && newChar <= 'Z') 
+                                                                 || (newChar >= '0' && newChar <= '9') || newChar == '_'))
+                        {
                             return checkKeyword(str);
                         }
 
