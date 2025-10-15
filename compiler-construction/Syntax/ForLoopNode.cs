@@ -11,6 +11,7 @@ public class ForLoopNode : TreeNode
     
     public override void ReadTokens(out Token lastToken)
     {
-        throw new NotImplementedException();
+        children.Add(NodeFactory.ConstructNode(new ForHeader(), lexer, firstToken, out var token));
+        children.Add(NodeFactory.ConstructNode(new LoopBodyNode(), lexer, token, out lastToken));
     }
 }

@@ -1,4 +1,5 @@
 using compiler_construction.Tokenization;
+using compiler_construction.Tokenization.Keywords;
 
 namespace compiler_construction.Syntax;
 
@@ -11,6 +12,11 @@ public class LoopBodyNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
-        throw new NotImplementedException();
+        children.Add(NodeFactory.ConstructNode(new BodyNode(), lexer, lexer.GetNextToken(), out lastToken));
+
+        if (lastToken is not End)
+        {
+            throw new UnexpectedTokenException($"Expected loop body end, got {lastToken}");
+        }
     }
 }
