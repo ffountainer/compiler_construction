@@ -6,8 +6,13 @@ public class NodeFactory
 {
     public static T ConstructNode<T>(T node, Lexer lexer, Token firstToken) where T : TreeNode
     {
+        return ConstructNode(node, lexer, firstToken, out _);
+    }
+    
+    public static T ConstructNode<T>(T node, Lexer lexer, Token firstToken, out Token lastToken) where T : TreeNode
+    {
         node.Init(lexer, firstToken);
-        node.ReadTokens();
+        node.ReadTokens(out lastToken);
         
         return node;
     }

@@ -1,3 +1,5 @@
+using compiler_construction.Tokenization;
+
 namespace compiler_construction.Syntax;
 
 public class VariableDeclarationNode : TreeNode
@@ -7,8 +9,8 @@ public class VariableDeclarationNode : TreeNode
         return "VariableDefinition";
     }
 
-    public override void ReadTokens()
+    public override void ReadTokens(out Token lastToken)
     {
-        if (firstToken)
+        throw new System.NotImplementedException();
     }
 }

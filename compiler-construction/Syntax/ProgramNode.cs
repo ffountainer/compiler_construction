@@ -6,16 +6,13 @@ public class ProgramNode : TreeNode
 {
     public override string GetName() => "Program";
 
-    override public void ReadTokens()
+    override public void ReadTokens(out Token lastToken)
     {
-        var token = lexer.GetNextToken();
+        lastToken = null;
+        var token = firstToken;
         while (token is not FinishProgram)
         {
-            var statement = new StatementNode();
-            statement.Init(lexer, token);
-            statement.ReadTokens();
-            children.Add(statement);
-            
+            children.Add(NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken));
             token = lexer.GetNextToken();
         }
     }

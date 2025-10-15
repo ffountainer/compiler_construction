@@ -2,11 +2,11 @@ using compiler_construction.Tokenization;
 
 namespace compiler_construction.Syntax;
 
-public class ExitNode : TreeNode
+public class IdentifierNode : TreeNode
 {
     public override string GetName()
     {
-        return "Exit";
+        return "Identifier";
     }
 
     public override void ReadTokens(out Token lastToken)

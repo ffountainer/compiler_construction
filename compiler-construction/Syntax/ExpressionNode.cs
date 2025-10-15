@@ -2,15 +2,15 @@ using compiler_construction.Tokenization;
 
 namespace compiler_construction.Syntax;
 
-public class ExitNode : TreeNode
+public class ExpressionNode : TreeNode
 {
     public override string GetName()
     {
-        return "Exit";
+        return "Expression";
     }
 
     public override void ReadTokens(out Token lastToken)
     {
-        lastToken = firstToken;
+        throw new NotImplementedException();
     }
 }

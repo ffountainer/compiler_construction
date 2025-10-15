@@ -12,8 +12,9 @@ class SyntaxAnalyzer
         this._lexer = lexer;
     }
 
-    public string GetAST()
+    public void PrintAST()
     {
-        var prog = new ProgramNode(_lexer);
+        var program = NodeFactory.ConstructNode(new ProgramNode(), _lexer, _lexer.GetNextToken());
+        program.PrintTree();
     }
 }

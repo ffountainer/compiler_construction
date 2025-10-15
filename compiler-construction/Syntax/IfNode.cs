@@ -1,3 +1,5 @@
+using compiler_construction.Tokenization;
+
 namespace compiler_construction.Syntax;
 
 public class IfNode : TreeNode
@@ -8,7 +10,7 @@ public class IfNode : TreeNode
         throw new NotImplementedException();
     }
 
-    public override void ReadTokens()
+    public override void ReadTokens(out Token lastToken)
     {
         throw new NotImplementedException();
     }

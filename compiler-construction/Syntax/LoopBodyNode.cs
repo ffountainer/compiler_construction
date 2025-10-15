@@ -1,3 +1,5 @@
+using compiler_construction.Tokenization;
+
 namespace compiler_construction.Syntax;
 
 public class LoopBodyNode : TreeNode
@@ -7,7 +9,7 @@ public class LoopBodyNode : TreeNode
         return  "LoopBody";
     }
 
-    public override void ReadTokens()
+    public override void ReadTokens(out Token lastToken)
     {
         throw new NotImplementedException();
     }

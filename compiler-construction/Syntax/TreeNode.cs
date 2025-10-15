@@ -15,11 +15,11 @@ public abstract class TreeNode
         this.firstToken = firstToken;
     }
     
-    public abstract void ReadTokens();
+    public abstract void ReadTokens(out Token lastToken);
 
     public abstract string GetName();
     
-    public virtual void PrintTree(int level)
+    public virtual void PrintTree(int level = 0)
     {
         Console.WriteLine(new string(' ', level) + GetName());
         foreach (var child in children)
@@ -28,3 +28,5 @@ public abstract class TreeNode
         }
     }
 }
+
+// ident [ a + b ]
