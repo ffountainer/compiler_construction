@@ -16,7 +16,7 @@ public class StatementNode : TreeNode
         Token terminator;
         if (firstToken is Var)
         {
-            children.Add(NodeFactory.ConstructNode(new VariableDeclarationNode(), lexer, firstToken, out terminator));
+            children.Add(NodeFactory.ConstructNode(new DeclarationNode(), lexer, firstToken, out terminator));
         }
         else if (firstToken is If)
         {
