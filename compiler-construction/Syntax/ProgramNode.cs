@@ -10,10 +10,10 @@ public class ProgramNode : TreeNode
     {
         lastToken = null;
         var token = firstToken;
-        while (token is not FinishProgram)
+        while (lastToken is not FinishProgram)
         {
             children.Add(NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken));
-            token = lexer.GetNextToken();
+            token = lastToken;
         }
     }
 }

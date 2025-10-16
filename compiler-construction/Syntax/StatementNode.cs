@@ -13,6 +13,8 @@ public class StatementNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
+        Debug.Log($"Starting to parse statement from {firstToken.GetSourceText()} : {firstToken}");
+
         Token terminator;
         if (firstToken is Var)
         {
@@ -40,6 +42,7 @@ public class StatementNode : TreeNode
         }
         else if (firstToken is Identifier)
         {
+            Debug.Log($"Encountered Assignment Statement, while first token is {firstToken} [ {firstToken.GetSourceText()} ]");
             children.Add(NodeFactory.ConstructNode(new AssignmentNode(), lexer, firstToken, out terminator));
         }
         else if (firstToken is Return)
@@ -48,7 +51,13 @@ public class StatementNode : TreeNode
         }
         else if (firstToken is Print)
         {
+            Debug.Log("Encountered print statement");
             children.Add(NodeFactory.ConstructNode(new PrintNode(), lexer, firstToken, out terminator));
+        }
+        else if (firstToken is StatementSeparator)
+        {
+            // Empty statement is skipped
+            terminator = firstToken;
         }
         else
         {
@@ -60,6 +69,7 @@ public class StatementNode : TreeNode
             throw new UnexpectedTokenException($"Expected end of statement, got {terminator}");
         }
         
-        lastToken = terminator;
+        lastToken = lexer.GetNextToken();
+        Debug.Log($"--- Statement parsed [ {children.LastOrDefault(new ProgramNode()).GetName()} ], next will start with {lastToken}");
     }
 }

@@ -19,7 +19,6 @@ public class AssignmentNode : TreeNode
             throw new UnexpectedTokenException($"Expected :=, got {colonEqual}");
         }
         
-        children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken()));
-        lastToken = lexer.GetNextToken();
+        children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));
     }
 }

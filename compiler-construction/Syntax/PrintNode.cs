@@ -16,6 +16,7 @@ public class PrintNode : TreeNode
         do
         {
             var token = lexer.GetNextToken();
+            Debug.Log($"Will construct expression for print starting with {token.GetSourceText()}");
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out commaOrEnd));
 
             if (commaOrEnd is not Comma && commaOrEnd is not StatementSeparator)
