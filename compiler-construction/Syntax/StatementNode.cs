@@ -42,6 +42,10 @@ public class StatementNode : TreeNode
         {
             children.Add(NodeFactory.ConstructNode(new AssignmentNode(), lexer, firstToken, out terminator));
         }
+        else if (firstToken is Return)
+        {
+            children.Add(NodeFactory.ConstructNode(new ReturnNode(), lexer, firstToken, out terminator));
+        }
         else
         {
             throw new UnexpectedTokenException($"Unexpected token {firstToken}");
