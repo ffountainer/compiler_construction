@@ -33,5 +33,6 @@ public class FactorNode : TreeNode
         } while (opToken is Plus || opToken is Minus);
 
         lastToken = opToken;
+        Debug.Log($"Factor returns {lastToken.GetSourceText()} as last token");
     }
 }

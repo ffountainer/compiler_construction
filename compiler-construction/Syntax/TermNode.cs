@@ -24,14 +24,14 @@ public class TermNode : TreeNode
         do
         {
             var node = new UnaryNode(calledByForHeader && token == firstToken);
-            children.Add(NodeFactory.ConstructNode(node, lexer, token,  out opToken));
+            children.Add(NodeFactory.ConstructNode(node, lexer, token,  out lastToken));
 
-            if (opToken is Times || opToken is Divide)
+            if (lastToken is Times || lastToken is Divide)
             {
                 token = lexer.GetNextToken();
             }
-        } while (opToken is Times || opToken is Divide);
+        } while (lastToken is Times || lastToken is Divide);
         
-        lastToken = token;
+        Debug.Log($"Term returning {lastToken.GetSourceText()} as last token");
     }
 }

@@ -24,6 +24,6 @@ public class ArrayElementNode : TreeNode
             throw new UnexpectedTokenException($"Expected ], but got {terminator.GetSourceText()}");
         }
         
-        lastToken = terminator;
+        lastToken = lexer.GetNextToken();
     }
 }

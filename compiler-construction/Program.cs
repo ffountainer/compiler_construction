@@ -1,4 +1,6 @@
-﻿namespace compiler_construction;
+﻿using compiler_construction.Syntax;
+
+namespace compiler_construction;
 
 using Tokenization;
 
@@ -10,18 +12,39 @@ class Program
     private static void Main(string[] args)
     {
         string path = "../../../tests/tuples/test4.d";
-        _fileStream =  new FileStream(path, FileMode.Open);
-        _streamReader = new StreamReader(_fileStream);
-        Lexer lexer = new Lexer(path, _streamReader);
 
-        while (!_streamReader.EndOfStream)
+        Debug.Log("Hello World!");
+
+        LexerShowcase(path);
+        SyntaxAnalyzerShowcase(path);
+    }
+
+    private static void LexerShowcase(string path)
+    {
+        var fileStream =  new FileStream(path, FileMode.Open);
+        var streamReader = new StreamReader(fileStream);
+        Lexer lexer = new Lexer(path, streamReader);
+
+        while (!streamReader.EndOfStream)
         {
             Token newToken = lexer.GetNextToken();
             Console.WriteLine("Tk: " + newToken.GetType().Name + " | \"" + newToken.GetSourceText() + "\"");
         }
         
-        _fileStream.Close();
-        _streamReader.Close();
+        fileStream.Close();
+        streamReader.Close();
     }
-    
+
+    private static void SyntaxAnalyzerShowcase(string path)
+    {
+        var filestream = new FileStream(path, FileMode.Open);
+        var streamReader = new StreamReader(filestream);
+        
+        var lexer = new Lexer(path, streamReader);
+        var analyzer = new SyntaxAnalyzer(lexer);
+        analyzer.PrintAST();
+        
+        streamReader.Close();
+        filestream.Close();
+    }
 }

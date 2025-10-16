@@ -29,13 +29,14 @@ public class UnaryNode : TreeNode
             return;
         }
         
-        children.Add(NodeFactory.ConstructNode(new ReferenceNode(calledByForHeader), lexer, firstToken));
+        children.Add(NodeFactory.ConstructNode(new ReferenceNode(calledByForHeader), lexer, firstToken, out lastToken));
         
-        lastToken = lexer.GetNextToken();
         if (lastToken is Is)
         {
             var token = lexer.GetNextToken();
             children.Add(NodeFactory.ConstructNode(new TypeIndicatorNode(), lexer, token, out lastToken));
         }
+        
+        Debug.Log($"Unary returning {lastToken.GetSourceText()} as last token");
     }
 }

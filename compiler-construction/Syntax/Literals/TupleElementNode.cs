@@ -20,6 +20,8 @@ public class TupleElementNode : TreeNode
         {
             children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, token, out lastToken));
 
+            // Since identifier sets last token to itself
+            lastToken = lexer.GetNextToken();
             if (lastToken is not ColonEqual)
             {
                 throw new UnexpectedTokenException($"Expected := as part of tuple element definition, got {lastToken}");

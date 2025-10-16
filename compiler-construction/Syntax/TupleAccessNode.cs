@@ -1,3 +1,4 @@
+using compiler_construction.Syntax.Literals;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Types;
 
@@ -19,13 +20,13 @@ public class TupleAccessNode : TreeNode
         }
         else if (token is Int)
         {
-            children.Add(NodeFactory.ConstructNode(new IntLiteralNode(), lexer, token));
+            children.Add(NodeFactory.ConstructNode(new IntegerNode(), lexer, token));
         }
         else
         {
             throw new UnexpectedTokenException($"For tuple access expected int literal or identifier, got {token}");
         }
         
-        lastToken = token;
+        lastToken = lexer.GetNextToken();
     }
 }

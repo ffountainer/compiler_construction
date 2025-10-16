@@ -3,6 +3,9 @@ using compiler_construction.Tokenization.Keywords;
 
 namespace compiler_construction.Syntax;
 
+/// <summary>
+/// Sets following token as last token
+/// </summary>
 public class ExpressionNode : TreeNode
 {
     private bool calledByForHeader = false;
@@ -19,20 +22,13 @@ public class ExpressionNode : TreeNode
     
     public override void ReadTokens(out Token lastToken)
     {
-        Token opToken;
         Token token = firstToken;
         do
         {
-            children.Add(NodeFactory.ConstructNode(new RelationNode(calledByForHeader), lexer, token));
-
-            opToken = lexer.GetNextToken();
-            if (!AcceptableOperation(opToken))
-            {
-                throw new UnexpectedTokenException($"Unexpected token for connecting relations: {opToken}");
-            }
-        } while (AcceptableOperation(opToken));
-
-        lastToken = opToken;
+            children.Add(NodeFactory.ConstructNode(new RelationNode(calledByForHeader), lexer, token, out lastToken));
+        } while (AcceptableOperation(lastToken));
+        
+        Debug.Log($"Expression returning {lastToken.GetSourceText()} as last token");
     }
 
     private bool AcceptableOperation(Token token)

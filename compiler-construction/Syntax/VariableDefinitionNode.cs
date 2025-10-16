@@ -22,7 +22,9 @@ public class VariableDefinitionNode : TreeNode
         lastToken = lexer.GetNextToken();
         if (lastToken is ColonEqual)
         {
+            Debug.Log("Got colon equal in var def, construct expr");
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));
+            Debug.Log($"Var def got {lastToken.GetSourceText()} as last token out of expression");
         }
     }
 }

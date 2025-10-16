@@ -5,14 +5,11 @@ using compiler_construction.Tokenization.Symbols;
 
 namespace compiler_construction.Syntax;
 
-/// <summary>
-/// Constructs Reference AST Node, puts closing operation token or the identifier itself
-/// </summary>
 public class ReferenceNode : TreeNode
 {
     private bool calledByForHeader;
 
-    public ReferenceNode(bool calledByForHeader)
+    public ReferenceNode(bool calledByForHeader = false)
     {
         this.calledByForHeader = calledByForHeader;
     }
@@ -24,12 +21,15 @@ public class ReferenceNode : TreeNode
     
     public override void ReadTokens(out Token lastToken)
     {
+        Debug.Log($"Start constructing reference from {firstToken.GetSourceText()}");
+        
         if (firstToken is not Identifier)
         {
             throw new UnexpectedTokenException("Expected identifier but got " + firstToken);
         }
 
         var opToken = lexer.GetNextToken();
+        Debug.Log($"Reference got op token {opToken.GetSourceText()}");
         
         if (opToken is In)
         {
@@ -58,6 +58,7 @@ public class ReferenceNode : TreeNode
         {
             children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken));
             lastToken = opToken;
+            Debug.Log($"Constructed simple ident-ref, returning {lastToken.GetSourceText()} as last token");
         }
     }
 }

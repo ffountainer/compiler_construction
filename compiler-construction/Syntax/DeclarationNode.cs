@@ -17,6 +17,7 @@ public class DeclarationNode : TreeNode
         {
             var node = new VariableDefinitionNode();
             var token = lexer.GetNextToken();
+            Debug.Log($"Var def starts from {token.GetSourceText()}");
             children.Add(NodeFactory.ConstructNode(node, lexer, token, out commaOrEnd));
 
             if (commaOrEnd is not Comma && commaOrEnd is not StatementSeparator)

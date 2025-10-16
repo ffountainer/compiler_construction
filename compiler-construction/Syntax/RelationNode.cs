@@ -19,8 +19,7 @@ public class RelationNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
-        var token = lexer.GetNextToken();
-        children.Add(NodeFactory.ConstructNode(new FactorNode(calledByForHeader), lexer, token, out var opToken));
+        children.Add(NodeFactory.ConstructNode(new FactorNode(calledByForHeader), lexer, firstToken, out var opToken));
 
         if (AcceptableOperation(opToken))
         {
@@ -30,6 +29,8 @@ public class RelationNode : TreeNode
         {
             lastToken = opToken;
         }
+        
+        Debug.Log($"Relation node returns {lastToken.GetSourceText()} as last token");
     }
 
     private bool AcceptableOperation(Token token)
