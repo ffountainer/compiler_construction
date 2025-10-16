@@ -41,6 +41,10 @@ public class LiteralNode : TreeNode
         {
             children.Add(NodeFactory.ConstructNode(new ArrayNode(), lexer, lexer.GetNextToken(),  out lastToken));
         }
+        else if (firstToken is None)
+        {
+            children.Add(NodeFactory.ConstructNode(new NoneLiteral(), lexer, firstToken, out lastToken));
+        }
         else
         {
             throw new UnauthorizedAccessException($"Unexpected token for literal: {firstToken}");
