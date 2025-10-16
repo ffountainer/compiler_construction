@@ -46,6 +46,7 @@ public class UnaryNode : TreeNode
         {
             var token = lexer.GetNextToken();
             children.Add(NodeFactory.ConstructNode(new TypeIndicatorNode(), lexer, token, out lastToken));
+            Debug.Log($"Type indicator returned last token {lastToken}");
         }
         
         Debug.Log($"Unary returning {lastToken.GetSourceText()} as last token");

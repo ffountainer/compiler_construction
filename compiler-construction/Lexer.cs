@@ -14,6 +14,7 @@ public class Lexer
     private Token _nextToken = null;
     private string path; 
     private StreamReader _streamReader;
+    private bool hardStatementSeparator = false;
 
     public Lexer(string path, StreamReader streamReader)
     {
@@ -32,6 +33,12 @@ public class Lexer
             var readValue = _streamReader.Peek();
             if (readValue == -1)
             {
+                if (!hardStatementSeparator)
+                {
+                    hardStatementSeparator = true;
+                    return new StatementSeparator("extra \\n");
+                }
+                
                 return new FinishProgram();
             }
 

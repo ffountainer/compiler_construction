@@ -1,5 +1,6 @@
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
+using compiler_construction.Tokenization.Keywords;
 using compiler_construction.Tokenization.Types;
 using String = compiler_construction.Tokenization.Types.String;
 
@@ -11,28 +12,28 @@ public class TypeIndicatorNode : TreeNode
     
     public override string GetName()
     {
-        return "TypeIndicator";
+        return $"TypeIndicator: {name}";
     }
 
     public override void ReadTokens(out Token lastToken)
     {
-        if (firstToken is Int)
+        if (firstToken is IntKeyword)
         {
             name = "int";
         }
-        else if (firstToken is Bool)
+        else if (firstToken is BoolKeyword)
         {
             name = "bool";
         }
-        else if (firstToken is Real)
+        else if (firstToken is RealKeyword)
         {
             name = "real";
         }
-        else if (firstToken is String)
+        else if (firstToken is StringKeyword)
         {
             name = "string";
         }
-        else if (firstToken is None)
+        else if (firstToken is NoneKeyword)
         {
             name = "no type";
         }
@@ -66,5 +67,6 @@ public class TypeIndicatorNode : TreeNode
         }
 
         lastToken = lexer.GetNextToken();
+        Debug.Log($"Type indicator last token is {lastToken}");
     }
 }
