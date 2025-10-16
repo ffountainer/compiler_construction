@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Text;
 using compiler_construction.Tokenization;
 
 namespace compiler_construction.Syntax;
@@ -21,12 +22,22 @@ public abstract class TreeNode
     
     public virtual void PrintTree(int level = 0)
     {
-        Console.WriteLine(new string(' ', level) + GetName());
+        Console.WriteLine(string.Concat(Enumerable.Repeat("|  ", level)) + GetName());
         foreach (var child in children)
         {
             child.PrintTree(level + 1);
         }
     }
-}
 
-// ident [ a + b ]
+    public override string ToString()
+    {
+        var builder = new StringBuilder().Append("{ ");
+
+        foreach (var child in children)
+        {
+            builder.Append(child.GetName()).Append(", ");
+        }
+        
+        return builder.Append(" }").ToString();
+    }
+}

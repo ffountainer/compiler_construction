@@ -38,7 +38,6 @@ public class PrimaryNode : TreeNode
             return;
         }
         
-        children.Add(NodeFactory.ConstructNode(new LiteralNode(), lexer, firstToken));
-        lastToken = lexer.GetNextToken();
+        children.Add(NodeFactory.ConstructNode(new LiteralNode(), lexer, firstToken, out lastToken));
     }
 }

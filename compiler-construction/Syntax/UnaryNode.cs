@@ -23,13 +23,24 @@ public class UnaryNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
-        if (firstToken is Plus || firstToken is Minus || firstToken is Not)
+        if (firstToken is not Identifier || IsPrimaryOperator(firstToken))
         {
-            children.Add(NodeFactory.ConstructNode(new PrimaryNode(), lexer, lexer.GetNextToken(), out lastToken));
+            Debug.Log($"Unary goes to construct Primary because [ ident: {firstToken is Identifier}, primary op: {IsPrimaryOperator(firstToken)} ], where firstToken is {firstToken.GetSourceText()}");
+            
+            var token = firstToken;
+            if (IsPrimaryOperator(token))
+            {
+                token = lexer.GetNextToken();
+            }
+            
+            Debug.Log($"Starting to construct primary from {token.GetSourceText()}");
+            children.Add(NodeFactory.ConstructNode(new PrimaryNode(), lexer, token, out lastToken));
+            Debug.Log($"Constructed primary in Unary, last token: {lastToken.GetSourceText()}");
             return;
         }
         
         children.Add(NodeFactory.ConstructNode(new ReferenceNode(calledByForHeader), lexer, firstToken, out lastToken));
+        Debug.Log($"Unary finished constructing ref, last token: {lastToken.GetSourceText()}, constructed ref is {children.Last()}");
         
         if (lastToken is Is)
         {
@@ -38,5 +49,10 @@ public class UnaryNode : TreeNode
         }
         
         Debug.Log($"Unary returning {lastToken.GetSourceText()} as last token");
+    }
+
+    private bool IsPrimaryOperator(Token token)
+    {
+        return token is Plus || token is Minus || token is Not;
     }
 }

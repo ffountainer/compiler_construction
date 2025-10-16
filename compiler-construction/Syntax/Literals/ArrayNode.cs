@@ -14,6 +14,14 @@ public class ArrayNode : TreeNode
     public override void ReadTokens(out Token lastToken)
     {
         var token = lexer.GetNextToken();
+        
+        // Check for empty array definition
+        if (token is RightBracket)
+        {
+            lastToken = token;
+            return;
+        }
+        
         while (true)
         {
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out token));

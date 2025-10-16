@@ -39,7 +39,7 @@ public class LiteralNode : TreeNode
         }
         else if (firstToken is LeftBracket)
         {
-            children.Add(NodeFactory.ConstructNode(new ArrayNode(), lexer, lexer.GetNextToken(),  out lastToken));
+            children.Add(NodeFactory.ConstructNode(new ArrayNode(), lexer, firstToken,  out lastToken));
         }
         else if (firstToken is None)
         {
