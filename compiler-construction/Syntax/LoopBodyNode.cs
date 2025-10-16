@@ -18,5 +18,8 @@ public class LoopBodyNode : TreeNode
         {
             throw new UnexpectedTokenException($"Expected loop body end, got {lastToken}");
         }
+        
+        lastToken = lexer.GetNextToken();
+        Debug.Log("Done constructing loop body");
     }
 }

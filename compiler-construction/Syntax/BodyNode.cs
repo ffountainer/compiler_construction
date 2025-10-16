@@ -15,11 +15,13 @@ public class BodyNode : TreeNode
         lastToken = null;
         var token = firstToken;
         bool hasStatements = false;
-        while (token is not End)
+        while (token is not End && token is not Else)
         {
             children.Add(NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken));
             hasStatements = true;
             token = lastToken;
+            
+            Debug.Log($"Finished statement in body, got {token}");
         }
 
         if (!hasStatements)
@@ -28,5 +30,6 @@ public class BodyNode : TreeNode
         }
 
         lastToken = token;
+        Debug.Log(">> Done constructing body");
     }
 }

@@ -11,6 +11,7 @@ public class ExitNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
-        lastToken = firstToken;
+        lastToken = lexer.GetNextToken();
+        Debug.Log($"Constructed exit node, lest token: {lastToken}");
     }
 }

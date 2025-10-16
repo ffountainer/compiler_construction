@@ -32,22 +32,31 @@ public class IfNode : TreeNode
         }
 
         token = lexer.GetNextToken();
-        children.Add(NodeFactory.ConstructNode(new BodyNode(), lexer, token, out var elseOrEnd));
-
-        if (elseOrEnd is StatementSeparator)
+        
+        // Short if is handled like
+        // if expression => expression
+        if (isShort)
         {
-            lastToken = elseOrEnd;
+            children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out lastToken));
             return;
         }
+        
+        children.Add(NodeFactory.ConstructNode(new BodyNode(), lexer, token, out var elseOrEnd));
 
+        if (elseOrEnd is not Else && elseOrEnd is not End)
+        {
+            throw new UnexpectedTokenException($"Expected else or end for if. Got {elseOrEnd}");
+        }
+        
         if (elseOrEnd is Else && isShort)
         {
             throw new UnexpectedTokenException("No else allowed on short if.");
         }
 
-        if (elseOrEnd is not StatementSeparator && elseOrEnd is not Else)
+        if (elseOrEnd is End)
         {
-            throw new UnexpectedTokenException($"Expected else or statement end. Got {elseOrEnd}");
+            lastToken = lexer.GetNextToken();
+            return;
         }
         
         token = lexer.GetNextToken();
@@ -58,6 +67,6 @@ public class IfNode : TreeNode
             throw new UnexpectedTokenException($"Expected end of if. Got {end}");
         }
 
-        lastToken = end;
+        lastToken = lexer.GetNextToken();
     }
 }
