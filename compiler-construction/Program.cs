@@ -11,11 +11,11 @@ class Program
     
     private static void Main(string[] args)
     {
-        string path = "../../../tests/tuples/test4.d";
+        string path = "../../../tests/arrays/test1.d";
 
         Debug.Log("Hello World!");
 
-        LexerShowcase(path);
+        // LexerShowcase(path);
         SyntaxAnalyzerShowcase(path);
     }
 

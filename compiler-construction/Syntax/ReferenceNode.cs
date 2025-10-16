@@ -31,7 +31,7 @@ public class ReferenceNode : TreeNode
         var opToken = lexer.GetNextToken();
         Debug.Log($"Reference got op token {opToken.GetSourceText()}");
         
-        if (opToken is In)
+        if (opToken is In || opToken is ColonEqual)
         {
             if (calledByForHeader)
             {

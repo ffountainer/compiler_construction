@@ -1,6 +1,7 @@
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Keywords;
 using compiler_construction.Tokenization.Operators;
+using compiler_construction.Tokenization.Symbols;
 
 namespace compiler_construction.Syntax;
 

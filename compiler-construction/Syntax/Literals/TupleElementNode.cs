@@ -15,21 +15,16 @@ public class TupleElementNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
-        var token = firstToken;
-        if (token is Identifier)
+        var node = NodeFactory.ConstructNode(new ExpressionNode(true), lexer, firstToken, out var colorEqual);
+        if (colorEqual is ColonEqual)
         {
-            children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, token, out lastToken));
-
-            // Since identifier sets last token to itself
-            lastToken = lexer.GetNextToken();
-            if (lastToken is not ColonEqual)
-            {
-                throw new UnexpectedTokenException($"Expected := as part of tuple element definition, got {lastToken}");
-            }
-
-            token = lexer.GetNextToken();
+            children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken));
+            children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));
         }
-        
-        children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out lastToken));
+        else
+        {
+            children.Add(node);
+            lastToken = colorEqual;
+        }
     }
 }
