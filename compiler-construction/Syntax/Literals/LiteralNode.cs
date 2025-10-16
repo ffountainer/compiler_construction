@@ -35,7 +35,7 @@ public class LiteralNode : TreeNode
         }
         else if (firstToken is LeftCurlyBrace)
         {
-            children.Add(NodeFactory.ConstructNode(new TupleNode(), lexer, lexer.GetNextToken(), out lastToken));
+            children.Add(NodeFactory.ConstructNode(new TupleNode(), lexer, firstToken, out lastToken));
         }
         else if (firstToken is LeftBracket)
         {
