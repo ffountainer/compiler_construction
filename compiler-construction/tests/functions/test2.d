@@ -1,2 +1,2 @@
 var mimicTrex := func => print "rawrrrr"
-mimicTrex(0)
+var res := mimicTrex(0)

@@ -13,6 +13,8 @@ public class FunBodyNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
+        Debug.Log($"Starting fun body from {firstToken}");
+        
         if (firstToken is EqualGreater)
         {
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));

@@ -19,12 +19,14 @@ public class BodyNode : TreeNode
         {
             children.Add(NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken));
             hasStatements = true;
-            token = lexer.GetNextToken();
+            token = lastToken;
         }
 
         if (!hasStatements)
         {
             throw new Exception("Empty body is not supported.");
         }
+
+        lastToken = token;
     }
 }
