@@ -6,7 +6,7 @@ public class RealLiteral : TreeNode
 {
     public override string GetName()
     {
-        return "REAL";
+        return "REAL" + " " + firstToken.GetSourceText();
     }
 
     public override void ReadTokens(out Token lastToken)

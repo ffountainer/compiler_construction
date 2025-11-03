@@ -2,11 +2,11 @@ using compiler_construction.Tokenization;
 
 namespace compiler_construction.Syntax.Literals;
 
-public class BooleanNode : TreeNode
+public class IntegerLiteral : TreeNode
 {
     public override string GetName()
     {
-        return "Boolean";
+        return "INTEGER" +  " " + firstToken.GetSourceText();
     }
 
     public override void ReadTokens(out Token lastToken)

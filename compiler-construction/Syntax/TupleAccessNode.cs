@@ -20,7 +20,7 @@ public class TupleAccessNode : TreeNode
         }
         else if (token is Int)
         {
-            children.Add(NodeFactory.ConstructNode(new IntegerNode(), lexer, token));
+            children.Add(NodeFactory.ConstructNode(new IntegerLiteral(), lexer, token));
         }
         else
         {

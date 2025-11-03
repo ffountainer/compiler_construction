@@ -1,5 +1,5 @@
 var mimicAlanGrant := func is
     print "I hate computers!"
-    end
+end
 
 var res := mimicAlanGrant(0)

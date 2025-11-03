@@ -11,7 +11,7 @@ class Program
     
     private static void Main(string[] args)
     {
-        string path = "../../../tests/arrays/test1.d";
+        string path = "../../../tests/functions/test3.d";
 
         Debug.Log("Hello World!");
 

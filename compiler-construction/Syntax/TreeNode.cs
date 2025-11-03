@@ -10,6 +10,8 @@ public abstract class TreeNode
     protected Token firstToken;
     protected List<TreeNode> children = new List<TreeNode>();
 
+    
+
     public virtual void Init(Lexer lexer, Token firstToken)
     {
         this.lexer = lexer;

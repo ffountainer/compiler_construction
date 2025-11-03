@@ -19,7 +19,7 @@ public class LiteralNode : TreeNode
     {
         if (firstToken is Int)
         {
-            children.Add(NodeFactory.ConstructNode(new IntegerNode(), lexer, firstToken, out lastToken));
+            children.Add(NodeFactory.ConstructNode(new IntegerLiteral(), lexer, firstToken, out lastToken));
         }
         else if (firstToken is Real)
         {
@@ -27,11 +27,11 @@ public class LiteralNode : TreeNode
         }
         else if (firstToken is String)
         {
-            children.Add(NodeFactory.ConstructNode(new StringNode(), lexer, firstToken, out lastToken));
+            children.Add(NodeFactory.ConstructNode(new StringLiteral(), lexer, firstToken, out lastToken));
         }
         else if (firstToken is Bool)
         {
-            children.Add(NodeFactory.ConstructNode(new BooleanNode(), lexer, firstToken, out lastToken));
+            children.Add(NodeFactory.ConstructNode(new BooleanLiteral(), lexer, firstToken, out lastToken));
         }
         else if (firstToken is LeftCurlyBrace)
         {
