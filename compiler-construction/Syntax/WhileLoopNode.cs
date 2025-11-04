@@ -12,9 +12,10 @@ public class WhileLoopNode : TreeNode
     public override void ReadTokens(out Token lastToken)
     {
         // зондре дабалатория
-        
+        IsLoop = true;
         var token = lexer.GetNextToken();
         children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out var bodyStart));
         children.Add(NodeFactory.ConstructNode(new LoopBodyNode(), lexer, bodyStart, out lastToken));
+        IsLoop = false;
     }
 }

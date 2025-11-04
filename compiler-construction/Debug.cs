@@ -2,7 +2,7 @@ namespace compiler_construction;
 
 public static class Debug
 {
-    private const bool debug = false;
+    private const bool debug = true;
     private const bool info = false;
     
     public static void Log(object message)

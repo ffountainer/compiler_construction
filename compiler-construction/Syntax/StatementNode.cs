@@ -38,7 +38,14 @@ public class StatementNode : TreeNode
         }
         else if (firstToken is Exit)
         {
-            children.Add(NodeFactory.ConstructNode(new ExitNode(), lexer, firstToken, out terminator));
+            if (IsLoop)
+            {
+                children.Add(NodeFactory.ConstructNode(new ExitNode(), lexer, firstToken, out terminator));
+            }
+            else
+            {
+                throw new UnexpectedTokenException($"Exit keyword can only appear inside loops");
+            }
         }
         else if (firstToken is Identifier)
         {
