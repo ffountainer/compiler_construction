@@ -1,4 +1,5 @@
 using System.Collections;
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
 using compiler_construction.Tokenization.Symbols;
@@ -18,14 +19,15 @@ public class FunctionLiteralNode : TreeNode
     public override void ReadTokens(out Token lastToken)
     {
         IsFunc = true;
-        Hashtable scope = new Hashtable();
-        SyntaxAnalyzer.SetScope(scope);
+        Scope new_scope = new Scope(new Hashtable(), SyntaxAnalyzer.GetCurrentScope());
+        SyntaxAnalyzer.SetScope(new_scope);
         var token = lexer.GetNextToken();
         if (token is LeftBrace)
         {
             do
             {
                 token = lexer.GetNextToken();
+                SyntaxAnalyzer.AddToCurScope(token.GetSourceText(), true);
                 children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, token));
                 token = lexer.GetNextToken();
             } while (token is Comma);
@@ -39,7 +41,7 @@ public class FunctionLiteralNode : TreeNode
         }
         
         children.Add(NodeFactory.ConstructNode(new FunBodyNode(), lexer, token, out lastToken));
-        SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetGlobalReferences());
+        SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetCurrentScope().GetParentScope());
         IsFunc = false;
     }
 }

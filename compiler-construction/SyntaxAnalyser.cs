@@ -1,6 +1,7 @@
 using compiler_construction.Syntax;
 using compiler_construction.Tokenization;
 using System.Collections;
+using compiler_construction.Semantics;
 using compiler_construction.Syntax.Literals;
 
 namespace compiler_construction;
@@ -8,33 +9,36 @@ namespace compiler_construction;
 class SyntaxAnalyzer
 {
     private Lexer _lexer;
-    private static Hashtable globalReferences = new Hashtable();
 
+    public static Scope currentScope = new Scope(new Hashtable(), null);
     public SyntaxAnalyzer(Lexer lexer)
     {
         this._lexer = lexer;
     }
     
-    public static Hashtable scope = globalReferences;
-
-    public static void AddToScope(String key, bool isDefined)
+    public static void AddToCurScope(String key, bool isDefined)
     {
-        scope.Add(key, isDefined);
+        currentScope.AddToScope(key, isDefined);
+    }
+    
+    public static Scope GetCurrentScope()
+    {
+        return currentScope;
     }
 
-    public static Hashtable GetScope()
+    public static Scope GetParentScope()
     {
-        return scope;
+        return currentScope.GetParentScope();
     }
 
-    public static Hashtable GetGlobalReferences()
+    public static void SetScope(Hashtable sc, Scope parentScope)
     {
-        return globalReferences;
+        currentScope = new Scope(sc, parentScope);
     }
-
-    public static void SetScope(Hashtable sc)
+    
+    public static void SetScope(Scope scope)
     {
-        scope = sc;
+        currentScope = scope;
     }
 
     public void PrintAST()

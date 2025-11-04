@@ -1,3 +1,4 @@
+using System.Collections;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Keywords;
 using Range = compiler_construction.Tokenization.Symbols.Range;

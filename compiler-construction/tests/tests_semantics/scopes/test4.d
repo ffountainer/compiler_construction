@@ -1,5 +1,5 @@
 var x := 10
-var mimicAlanGrant := func is
+var mimicAlanGrant := func(x) is
     var x := "Me again!"
     print "I hate computers!"
 end

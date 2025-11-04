@@ -11,9 +11,8 @@ class Program
     
     private static void Main(string[] args)
     {
-        // string path = "../../../tests/tests_semantics/scopes/test4.d";
-        string path = "../../../tests/scopes/test2.d";
-
+        // string path = "../../../tests/tests_semantics/keywords/return/test3.d";
+        string path = "../../../tests/tuples/test4.d";
         Debug.Log("Hello World!");
 
         // LexerShowcase(path);

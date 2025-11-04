@@ -19,12 +19,12 @@ public class VariableDefinitionNode : TreeNode
             throw new UnexpectedTokenException("Expected identifier, but got " + firstToken);
         }
         
-        foreach (DictionaryEntry entry in SyntaxAnalyzer.GetScope())
+        foreach (DictionaryEntry entry in SyntaxAnalyzer.GetCurrentScope().GetScope())
         {
             Debug.Log($"Key: {entry.Key}, Value: {entry.Value}");
         }
         
-        if (SyntaxAnalyzer.GetScope().ContainsKey(firstToken.GetSourceText()))
+        if (SyntaxAnalyzer.GetCurrentScope().GetScope().ContainsKey(firstToken.GetSourceText()))
         {
             throw new SemanticException($"Identifier \"{firstToken.GetSourceText()}\" is already declared in this scope");
         } 
@@ -42,7 +42,8 @@ public class VariableDefinitionNode : TreeNode
             Debug.Log($"Var def got {lastToken.GetSourceText()} as last token out of expression");
         }
 
-        SyntaxAnalyzer.AddToScope(firstToken.GetSourceText(), isDefined);
+        SyntaxAnalyzer.AddToCurScope(firstToken.GetSourceText(), isDefined);
+        
 
     }
 }

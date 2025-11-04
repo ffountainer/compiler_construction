@@ -311,6 +311,8 @@ public class Lexer
             case "real" : return new RealKeyword(str);
             case "string": return new StringKeyword(str);
             case "func": return new Func(str);
+            case "true": return new Bool(str);
+            case "false": return new Bool(str);
             default: return new Identifier(str);
         }
     }

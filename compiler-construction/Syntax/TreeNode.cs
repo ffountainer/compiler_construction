@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Text;
 using compiler_construction.Tokenization;
+using compiler_construction.Tokenization.Types;
+using String = System.String;
 
 namespace compiler_construction.Syntax;
 
@@ -12,6 +14,10 @@ public abstract class TreeNode
 
     protected static bool IsLoop = false;
     protected static bool IsFunc = false;
+    protected static bool IsAssign = false;
+    protected static bool IsForLoop = false;
+    protected static bool IsWhileLoop = false;
+    protected static String currentIdent = "";
 
     public virtual void Init(Lexer lexer, Token firstToken)
     {

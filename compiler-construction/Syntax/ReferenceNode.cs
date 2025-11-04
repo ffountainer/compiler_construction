@@ -1,3 +1,5 @@
+using System.Collections;
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
 using compiler_construction.Tokenization.Keywords;
@@ -27,8 +29,43 @@ public class ReferenceNode : TreeNode
         {
             throw new UnexpectedTokenException("Expected identifier but got " + firstToken);
         }
+        bool flag = false;
+        var check_scope = SyntaxAnalyzer.GetCurrentScope();
+        do
+        {
+            if (check_scope.GetScope().ContainsKey(firstToken.GetSourceText()) || calledByForHeader)
+            {
+                flag = true;
+            }
+
+            check_scope = check_scope.GetParentScope();
+        } while (check_scope != null && flag == false);
+            
+        if (!flag)
+        {
+            throw new SemanticException($"No such variable declared \"{firstToken.GetSourceText()}\"");
+        }
 
         var opToken = lexer.GetNextToken();
+
+        flag = false;
+        
+        check_scope = SyntaxAnalyzer.GetCurrentScope();
+        do
+        {
+            if (!(SyntaxAnalyzer.GetCurrentScope().GetScope()[firstToken.GetSourceText()] is false && (IsAssign == false || !currentIdent.Equals(firstToken.GetSourceText())) && !opToken.GetSourceText().Equals("is") && !calledByForHeader))
+            {
+                flag = true;
+            }
+
+            check_scope = check_scope.GetParentScope();
+        } while (check_scope != null && flag == false);
+            
+        if (!flag)
+        {
+            throw new SemanticException($"Variable is not defined \"{firstToken.GetSourceText()}\"");
+        }
+        
         Debug.Log($"Reference got op token {opToken.GetSourceText()}");
         
         if (opToken is In)

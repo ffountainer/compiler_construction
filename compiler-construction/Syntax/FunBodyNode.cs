@@ -1,3 +1,5 @@
+using System.Collections;
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Keywords;
 using compiler_construction.Tokenization.Symbols;
@@ -13,6 +15,8 @@ public class FunBodyNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
+        Scope new_scope = new Scope(new Hashtable(), SyntaxAnalyzer.GetCurrentScope());
+        SyntaxAnalyzer.SetScope(new_scope);
         Debug.Log($"Starting fun body from {firstToken}");
         
         if (firstToken is EqualGreater)
@@ -34,5 +38,6 @@ public class FunBodyNode : TreeNode
         {
             throw new UnexpectedTokenException($"Expected => or is to start func definition but got {firstToken}");
         }
+        SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetCurrentScope().GetParentScope());
     }
 }

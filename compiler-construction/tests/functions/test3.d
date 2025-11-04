@@ -6,5 +6,5 @@ var checkIfTwoRexes := func(x) is
     end
     end
 
-var res := mimicAlanGrant(2)
-var res2 := mimicAlanGrant(4)
+var res := checkIfTwoRexes(2)
+var res2 := checkIfTwoRexes(4)
