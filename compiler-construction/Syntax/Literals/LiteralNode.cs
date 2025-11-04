@@ -14,7 +14,7 @@ public class LiteralNode : TreeNode
     {
         return "Literal";
     }
-
+    
     public override void ReadTokens(out Token lastToken)
     {
         if (firstToken is Int)

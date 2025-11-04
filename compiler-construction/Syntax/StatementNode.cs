@@ -1,3 +1,4 @@
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Keywords;
 using compiler_construction.Tokenization.Symbols;
@@ -44,7 +45,7 @@ public class StatementNode : TreeNode
             }
             else
             {
-                throw new UnexpectedTokenException($"Exit statement can only appear inside loops");
+                throw new SemanticException($"Exit statement can only appear inside loops");
             }
         }
         else if (firstToken is Identifier)
@@ -60,7 +61,7 @@ public class StatementNode : TreeNode
             }
             else
             {
-                throw new UnexpectedTokenException($"Return statement can only appear inside functions");
+                throw new SemanticException($"Return statement can only appear inside functions");
             }
         }
         else if (firstToken is Print)

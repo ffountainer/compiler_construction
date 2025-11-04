@@ -1,3 +1,5 @@
+using System.Collections;
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Symbols;
 
@@ -17,14 +19,30 @@ public class VariableDefinitionNode : TreeNode
             throw new UnexpectedTokenException("Expected identifier, but got " + firstToken);
         }
         
+        foreach (DictionaryEntry entry in SyntaxAnalyzer.GetScope())
+        {
+            Debug.Log($"Key: {entry.Key}, Value: {entry.Value}");
+        }
+        
+        if (SyntaxAnalyzer.GetScope().ContainsKey(firstToken.GetSourceText()))
+        {
+            throw new SemanticException($"Identifier \"{firstToken.GetSourceText()}\" is already declared in this scope");
+        } 
+        
         children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken));
+
+        bool isDefined = false;
         
         lastToken = lexer.GetNextToken();
         if (lastToken is ColonEqual)
         {
+            isDefined = true;
             Debug.Log("Got colon equal in var def, construct expr");
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));
             Debug.Log($"Var def got {lastToken.GetSourceText()} as last token out of expression");
         }
+
+        SyntaxAnalyzer.AddToScope(firstToken.GetSourceText(), isDefined);
+
     }
 }

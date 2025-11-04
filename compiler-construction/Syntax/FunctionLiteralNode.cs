@@ -1,3 +1,4 @@
+using System.Collections;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
 using compiler_construction.Tokenization.Symbols;
@@ -17,7 +18,8 @@ public class FunctionLiteralNode : TreeNode
     public override void ReadTokens(out Token lastToken)
     {
         IsFunc = true;
-        
+        Hashtable scope = new Hashtable();
+        SyntaxAnalyzer.SetScope(scope);
         var token = lexer.GetNextToken();
         if (token is LeftBrace)
         {
@@ -37,6 +39,7 @@ public class FunctionLiteralNode : TreeNode
         }
         
         children.Add(NodeFactory.ConstructNode(new FunBodyNode(), lexer, token, out lastToken));
+        SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetGlobalReferences());
         IsFunc = false;
     }
 }

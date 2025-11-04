@@ -7,4 +7,4 @@ var checkIfTwoRexes := func(x) is
     end
 
 var res := mimicAlanGrant(2)
-var res := mimicAlanGrant(4)
+var res2 := mimicAlanGrant(4)
