@@ -16,6 +16,8 @@ public class FunctionLiteralNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
+        IsFunc = true;
+        
         var token = lexer.GetNextToken();
         if (token is LeftBrace)
         {
@@ -23,6 +25,7 @@ public class FunctionLiteralNode : TreeNode
             {
                 token = lexer.GetNextToken();
                 children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, token));
+                token = lexer.GetNextToken();
             } while (token is Comma);
 
             if (token is not RightBrace)
@@ -34,5 +37,6 @@ public class FunctionLiteralNode : TreeNode
         }
         
         children.Add(NodeFactory.ConstructNode(new FunBodyNode(), lexer, token, out lastToken));
+        IsFunc = false;
     }
 }

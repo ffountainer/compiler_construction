@@ -12,6 +12,7 @@ public class LoopBodyNode : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
+        IsLoop = true;
         children.Add(NodeFactory.ConstructNode(new BodyNode(), lexer, lexer.GetNextToken(), out lastToken));
 
         if (lastToken is not End)
@@ -21,5 +22,6 @@ public class LoopBodyNode : TreeNode
         
         lastToken = lexer.GetNextToken();
         Debug.Log("Done constructing loop body");
+        IsLoop = false;
     }
 }

@@ -11,6 +11,7 @@ public abstract class TreeNode
     protected List<TreeNode> children = new List<TreeNode>();
 
     protected static bool IsLoop = false;
+    protected static bool IsFunc = false;
 
     public virtual void Init(Lexer lexer, Token firstToken)
     {

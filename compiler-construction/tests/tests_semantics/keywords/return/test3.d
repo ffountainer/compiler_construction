@@ -4,7 +4,7 @@ var checkIfTwoRexes := func(x) is
     else
         return "False!"
     end
-    end
+end
 
 var res := mimicAlanGrant(2)
 var res := mimicAlanGrant(4)

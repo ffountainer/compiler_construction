@@ -44,7 +44,7 @@ public class StatementNode : TreeNode
             }
             else
             {
-                throw new UnexpectedTokenException($"Exit keyword can only appear inside loops");
+                throw new UnexpectedTokenException($"Exit statement can only appear inside loops");
             }
         }
         else if (firstToken is Identifier)
@@ -54,7 +54,14 @@ public class StatementNode : TreeNode
         }
         else if (firstToken is Return)
         {
-            children.Add(NodeFactory.ConstructNode(new ReturnNode(), lexer, firstToken, out terminator));
+            if (IsFunc)
+            {
+                children.Add(NodeFactory.ConstructNode(new ReturnNode(), lexer, firstToken, out terminator));
+            }
+            else
+            {
+                throw new UnexpectedTokenException($"Return statement can only appear inside functions");
+            }
         }
         else if (firstToken is Print)
         {

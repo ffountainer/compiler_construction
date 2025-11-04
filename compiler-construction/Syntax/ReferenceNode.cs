@@ -31,7 +31,7 @@ public class ReferenceNode : TreeNode
         var opToken = lexer.GetNextToken();
         Debug.Log($"Reference got op token {opToken.GetSourceText()}");
         
-        if (opToken is In || opToken is ColonEqual)
+        if (opToken is In)
         {
             if (calledByForHeader)
             {
@@ -41,7 +41,7 @@ public class ReferenceNode : TreeNode
             
             throw new UnexpectedTokenException("Expected Reference op-token but got " + opToken);
         }
-        
+
         if (opToken is LeftBracket)
         {
             children.Add(NodeFactory.ConstructNode(new ArrayElementNode(), lexer, opToken, out lastToken));
