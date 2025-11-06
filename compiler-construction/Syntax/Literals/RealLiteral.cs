@@ -1,3 +1,4 @@
+using System.Globalization;
 using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 
@@ -15,10 +16,11 @@ public class RealLiteral : TreeNode
     public override void ReadTokens(out Token lastToken)
     {
         lastToken = firstToken;
-        if (double.TryParse(firstToken.GetSourceText(), out var number))
+        var text = firstToken.GetSourceText();
+        if (double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
             Value = number;
         else
-            throw new SemanticException($"invalid real literal {firstToken.GetSourceText()}");
+            throw new SemanticException($"invalid real literal {text}");
     }
 
     public RealLiteral WithValue(double value)

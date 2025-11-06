@@ -42,7 +42,9 @@ public class ExpressionNode : ConstReduceableNode
             if (AcceptableOperation(lastToken))
             {
                 operators.Add(lastToken);
+                token = lexer.GetNextToken();
             }
+            
         } while (AcceptableOperation(lastToken));
         
         Debug.Log($"Expression returning {lastToken.GetSourceText()} as last token");
