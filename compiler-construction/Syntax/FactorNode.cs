@@ -1,6 +1,7 @@
 using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Operators;
+using compiler_construction.Tokenization.Types;
 
 namespace compiler_construction.Syntax;
 
@@ -81,8 +82,13 @@ public class FactorNode : ConstReduceableNode
         
         ValueType = hasReal ? ConstValueType.Real : ConstValueType.Int;
         
-        if (ValueType == ConstValueType.Real) RealValue =  operands.First().GetRealValue();
+        if (operands.First().GetValueType() == ConstValueType.Real) RealValue = operands.First().GetRealValue();
         else IntValue =  operands.First().GetIntValue();
+        
+        if (ValueType == ConstValueType.Real && ValueType != operands.First().GetValueType())
+        {
+            RealValue = IntValue;
+        }
 
         for (int i = 0; i < operators.Count; i++)
         {
@@ -94,6 +100,8 @@ public class FactorNode : ConstReduceableNode
                 double rightOperandValue = rightOperand.GetValueType() == ConstValueType.Real
                     ? rightOperand.GetRealValue()
                     : rightOperand.GetIntValue();
+                
+                Debug.Log($"The left side is {RealValue} or int ({IntValue}) and the right side is {rightOperandValue}");
                 
                 RealValue = op is Plus
                     ? RealValue + rightOperandValue

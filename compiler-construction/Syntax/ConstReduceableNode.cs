@@ -50,12 +50,25 @@ public abstract class ConstReduceableNode : TreeNode
         }
         
         Calculate();
-
+        Debug.Log($"For node {GetName()} the tree before optimisations is");
+        if (Debug.debug)
+        {
+            foreach (TreeNode child in children)
+            {
+                child.PrintTree();
+            }
+        }
         children = new List<TreeNode>();
         children.Add(ConstructTrunk());
         
         Debug.Log($"For node {GetName()} reduced tree is");
-        if (Debug.debug) children.First().PrintTree();
+        if (Debug.debug)
+        {
+            foreach (TreeNode child in children)
+            {
+                child.PrintTree();
+            }
+        }
     }
 
     /// <summary>

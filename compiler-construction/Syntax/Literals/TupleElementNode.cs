@@ -13,7 +13,7 @@ public class TupleElementNode : TreeNode
         return "TupleElement";
     }
 
-    public IdentifierNode key;
+    public IdentifierNode? key;
     public ExpressionNode value;
     public override void ReadTokens(out Token lastToken)
     {
@@ -21,7 +21,10 @@ public class TupleElementNode : TreeNode
         if (colorEqual is ColonEqual)
         {
             var ident = NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken);
-            key = ident;
+            if (key != null)
+            {
+                key = ident;
+            }
             children.Add(ident);
             var expr = NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken);
             value = expr;
