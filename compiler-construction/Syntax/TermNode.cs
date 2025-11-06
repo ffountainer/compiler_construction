@@ -33,7 +33,7 @@ public class TermNode : ConstReduceableNode
             children.Add(node);
             operands.Add(node);
 
-            if (!node.IsConst || IsConst)
+            if (!node.IsConst && IsConst)
             {
                 IsConst = false;
             }

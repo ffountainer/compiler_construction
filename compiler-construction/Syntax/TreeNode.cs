@@ -56,7 +56,7 @@ public abstract class TreeNode
 
     public override string ToString()
     {
-        var builder = new StringBuilder().Append("{ ");
+        var builder = new StringBuilder().Append(GetName()).Append(" { ");
 
         foreach (var child in children)
         {

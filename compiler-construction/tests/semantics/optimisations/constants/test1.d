@@ -1,2 +1,1 @@
-var a := 11 + 5
-var b := 5 < 3
+var b := false and false

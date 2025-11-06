@@ -20,10 +20,12 @@ public class LiteralNode : ConstReduceableNode
     {
         if (firstToken is Int)
         {
+            IsConst = true;
             children.Add(NodeFactory.ConstructNode(new IntegerLiteral(), lexer, firstToken, out lastToken));
         }
         else if (firstToken is Real)
         {
+            IsConst = true;
             children.Add(NodeFactory.ConstructNode(new RealLiteral(), lexer, firstToken, out lastToken));
         }
         else if (firstToken is String)
@@ -32,6 +34,7 @@ public class LiteralNode : ConstReduceableNode
         }
         else if (firstToken is Bool)
         {
+            IsConst = true;
             children.Add(NodeFactory.ConstructNode(new BooleanLiteral(), lexer, firstToken, out lastToken));
         }
         else if (firstToken is LeftCurlyBrace)

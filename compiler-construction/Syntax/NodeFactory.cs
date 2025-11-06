@@ -16,6 +16,7 @@ public class NodeFactory
 
         if (node is ConstReduceableNode reduceable)
         {
+            Debug.Log($">>> Node {node.GetName()} tries to be reduced");
             reduceable.Reduce();
         }
         

@@ -45,6 +45,7 @@ public abstract class ConstReduceableNode : TreeNode
     {
         if (!CanReduce())
         {
+            Debug.Log($"Node {ToString()} cannot be reduced");
             return;
         }
         
@@ -52,6 +53,9 @@ public abstract class ConstReduceableNode : TreeNode
 
         children = new List<TreeNode>();
         children.Add(ConstructTrunk());
+        
+        Debug.Log($"For node {GetName()} reduced tree is");
+        if (Debug.debug) children.First().PrintTree();
     }
 
     /// <summary>
@@ -76,9 +80,13 @@ public abstract class ConstReduceableNode : TreeNode
 
     private TreeNode ConstructTrunk()
     {
+        Debug.Log($">> Will construct trunk for node {GetName()} of type {GetType()}");
+        
         // Expression > Relation > Factor > Term > Unary > Primary > Literal > TypedLiteral
         
         var node = GetTypedLiteral();
+
+        if (GetType() == typeof(LiteralNode)) return node;
         node = new LiteralNode().AddChild(node);
 
         if (GetType() == typeof(PrimaryNode)) return node;

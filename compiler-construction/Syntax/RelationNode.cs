@@ -26,12 +26,15 @@ public class RelationNode : ConstReduceableNode
     {
         lhs = NodeFactory.ConstructNode(new FactorNode(calledByForHeader), lexer, firstToken, out var opToken);
         children.Add(lhs);
+        IsConst = lhs.IsConst;
 
         if (AcceptableOperation(opToken))
         {
             theOperator = opToken;
             rhs = NodeFactory.ConstructNode(new FactorNode(), lexer, lexer.GetNextToken(), out lastToken);
             children.Add(rhs);
+
+            IsConst = lhs.IsConst && rhs.IsConst;
         }
         else
         {
