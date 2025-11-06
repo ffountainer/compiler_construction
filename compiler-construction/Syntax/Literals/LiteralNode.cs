@@ -64,19 +64,16 @@ public class LiteralNode : ConstReduceableNode
         {
             IntValue = integerLiteral.Value;
             ValueType = ConstValueType.Int;
-            IsConst =  true;
         }
         else if (node is RealLiteral realLiteral)
         {
             RealValue = realLiteral.Value;
             ValueType = ConstValueType.Real;
-            IsConst =  true;
         }
         else if (node is BooleanLiteral booleanLiteral)
         {
             BoolValue = booleanLiteral.Value;
             ValueType = ConstValueType.Boolean;
-            IsConst = true;
         }
     }
 }

@@ -47,7 +47,7 @@ public class PrimaryNode : ConstReduceableNode
 
         literalNode = NodeFactory.ConstructNode(new LiteralNode(), lexer, firstToken, out lastToken);
         children.Add(literalNode);
-        IsConst = true;
+        IsConst = literalNode.IsConst;
     }
     
     protected override void Calculate()
