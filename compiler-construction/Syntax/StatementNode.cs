@@ -7,11 +7,15 @@ namespace compiler_construction.Syntax;
 
 public class StatementNode : TreeNode
 {
+    private bool meaninglessIf = false;
+    
     public override string GetName()
     {
         return "Statement";
     }
 
+    public bool IsMeaningless() => meaninglessIf;
+    
     public override void ReadTokens(out Token lastToken)
     {
         Debug.Log($"Starting to parse statement from {firstToken.GetSourceText()} : {firstToken}");
@@ -23,7 +27,10 @@ public class StatementNode : TreeNode
         }
         else if (firstToken is If)
         {
-            children.Add(NodeFactory.ConstructNode(new IfNode(), lexer, firstToken, out terminator));
+            var node = NodeFactory.ConstructNode(new IfNode(), lexer, firstToken, out terminator);
+            children.Add(node);
+
+            meaninglessIf = !node.GetEverExecutes();
         }
         else if (firstToken is While)
         {
@@ -50,7 +57,9 @@ public class StatementNode : TreeNode
         }
         else if (firstToken is Identifier)
         {
-            Debug.Log($"Encountered Assignment Statement, while first token is {firstToken} [ {firstToken.GetSourceText()} ]");
+            Debug.Log($"Encountered Assignment Statement, " +
+                      $"while first token is {firstToken} [ {firstToken.GetSourceText()} ]");
+            
             children.Add(NodeFactory.ConstructNode(new AssignmentNode(), lexer, firstToken, out terminator));
         }
         else if (firstToken is Return)
@@ -85,6 +94,8 @@ public class StatementNode : TreeNode
         }
         
         lastToken = lexer.GetNextToken();
-        Debug.Log($"--- Statement parsed [ {children.LastOrDefault(new ProgramNode()).GetName()} ], next will start with {lastToken}");
+        
+        Debug.Log($"--- Statement parsed [ {children.LastOrDefault(new ProgramNode()).GetName()} ], " +
+                  $"next will start with {lastToken}");
     }
 }

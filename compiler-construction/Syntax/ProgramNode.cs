@@ -12,7 +12,13 @@ public class ProgramNode : TreeNode
         var token = firstToken;
         while (lastToken is not FinishProgram)
         {
-            children.Add(NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken));
+            var node = NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken);
+            
+            if (!node.IsMeaningless())
+            {
+                children.Add(node);
+            }
+            
             token = lastToken;
         }
     }

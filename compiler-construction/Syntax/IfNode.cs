@@ -1,3 +1,4 @@
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Keywords;
 using compiler_construction.Tokenization.Symbols;
@@ -7,17 +8,25 @@ namespace compiler_construction.Syntax;
 public class IfNode : TreeNode
 {
     private bool isShort;
+    private bool everExecutes = true;
+    private ExpressionNode expressionNode;
     
     public override string GetName()
     {
         return isShort ? "IfShort" : "If";
     }
 
+    public bool GetEverExecutes() =>  everExecutes;
+    
     public override void ReadTokens(out Token lastToken)
     {
         var token = lexer.GetNextToken();
-        children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out var thenOrArrow));
 
+        expressionNode = new ExpressionNode();
+        expressionNode = NodeFactory.ConstructNode(expressionNode, lexer, token, out var thenOrArrow);
+        
+        children.Add(expressionNode);
+        
         if (thenOrArrow is Then)
         {
             isShort = false;
@@ -38,6 +47,9 @@ public class IfNode : TreeNode
         if (isShort)
         {
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out lastToken));
+            
+            CheckIfRedundant();
+            
             return;
         }
         
@@ -56,9 +68,11 @@ public class IfNode : TreeNode
         if (elseOrEnd is End)
         {
             lastToken = lexer.GetNextToken();
+            CheckIfRedundant();
             return;
         }
         
+        // Construct body for else
         token = lexer.GetNextToken();
         children.Add(NodeFactory.ConstructNode(new BodyNode(), lexer, token, out var end));
 
@@ -68,5 +82,17 @@ public class IfNode : TreeNode
         }
 
         lastToken = lexer.GetNextToken();
+    }
+
+    private void CheckIfRedundant()
+    {
+        if (expressionNode.IsConst)
+        {
+            if (expressionNode.GetValueType() == ConstValueType.Boolean && !expressionNode.GetBoolValue()
+                || expressionNode.GetValueType() != ConstValueType.Boolean && expressionNode.GetNumericalValue() == 0)
+            {
+                everExecutes = false;
+            }
+        }
     }
 }
