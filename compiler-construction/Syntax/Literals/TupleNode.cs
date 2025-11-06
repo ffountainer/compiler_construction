@@ -1,3 +1,4 @@
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
 using compiler_construction.Tokenization.Symbols;
@@ -6,6 +7,7 @@ namespace compiler_construction.Syntax.Literals;
 
 public class TupleNode : TreeNode
 {
+    public List<TupleElementNode> Elements { get; } = new();
     public override string GetName()
     {
         return "Tuple";
@@ -26,7 +28,16 @@ public class TupleNode : TreeNode
             }
             
             Debug.Log($"TupleNode is adding new TupleElementNode, starting from {token.GetSourceText()}");
-            children.Add(NodeFactory.ConstructNode(new TupleElementNode(), lexer, token, out opToken));
+            var tupleElement = NodeFactory.ConstructNode(new TupleElementNode(), lexer, token, out opToken);
+            foreach (TupleElementNode element in Elements)
+            {
+                if (element.key.GetValue() == tupleElement.key.GetValue())
+                {
+                    throw new SemanticException($"Tuple element with key \"{element.key.GetValue()}\" already exists");
+                }
+            }
+            Elements.Add(tupleElement);
+            children.Add(tupleElement);
             Debug.Log($"TupleNode got opToken {opToken.GetSourceText()}");
 
             if (opToken is not Comma && opToken is not RightCurlyBrace)

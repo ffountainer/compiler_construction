@@ -74,26 +74,30 @@ public class TermNode : ConstReduceableNode
         
         ValueType = hasReal ? ConstValueType.Real : ConstValueType.Int;
         
-        if (ValueType == ConstValueType.Real) RealValue =  operands.First().GetRealValue();
+        if (operands.First().GetValueType() == ConstValueType.Real) RealValue = operands.First().GetRealValue();
         else IntValue = operands.First().GetIntValue();
 
+        if (ValueType == ConstValueType.Real && ValueType != operands.First().GetValueType())
+        {
+            RealValue = IntValue;
+        }
+        
+        Debug.Log(IntValue);
+        Debug.Log(RealValue);
+        
         for (int i = 0; i < operators.Count; i++)
         {
             var op =  operators[i];
             var rightOperand = operands[i + 1];
-            var leftOperand = operands[i];
             
             if (ValueType == ConstValueType.Real)
             {
                 double rightOperandValue = rightOperand.GetValueType() == ConstValueType.Int
                     ? rightOperand.GetIntValue()
                     : rightOperand.GetRealValue();
-                double leftOperandValue = leftOperand.GetValueType() == ConstValueType.Int
-                    ? rightOperand.GetIntValue()
-                    : rightOperand.GetRealValue();
                 
                 Debug.Log($"The value for the right operand is {rightOperandValue}");
-                Debug.Log($"The value for the left operand is {leftOperandValue}");
+                Debug.Log($"The value for the left operand is {IntValue}");
                 RealValue = op is Divide
                     ? RealValue / rightOperandValue
                     // Else operand is Times

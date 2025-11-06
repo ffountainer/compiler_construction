@@ -13,13 +13,19 @@ public class TupleElementNode : TreeNode
         return "TupleElement";
     }
 
+    public IdentifierNode key;
+    public ExpressionNode value;
     public override void ReadTokens(out Token lastToken)
     {
         var node = NodeFactory.ConstructNode(new ExpressionNode(true), lexer, firstToken, out var colorEqual);
         if (colorEqual is ColonEqual)
         {
-            children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken));
-            children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));
+            var ident = NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken);
+            key = ident;
+            children.Add(ident);
+            var expr = NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken);
+            value = expr;
+            children.Add(expr);
         }
         else
         {
