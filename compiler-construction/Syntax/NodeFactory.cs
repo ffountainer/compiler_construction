@@ -13,6 +13,11 @@ public class NodeFactory
     {
         node.Init(lexer, firstToken);
         node.ReadTokens(out lastToken);
+
+        if (node is ConstReduceableNode reduceable)
+        {
+            reduceable.Reduce();
+        }
         
         return node;
     }

@@ -1,3 +1,4 @@
+using compiler_construction.Semantics;
 using compiler_construction.Syntax.Literals;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
@@ -8,8 +9,11 @@ namespace compiler_construction.Syntax;
 /// <summary>
 /// Should place following token as last token
 /// </summary>
-public class PrimaryNode : TreeNode
+public class PrimaryNode : ConstReduceableNode
 {
+    private ExpressionNode? expressionNode;
+    private LiteralNode? literalNode;
+    
     public override string GetName()
     {
         return "Primary";
@@ -21,7 +25,10 @@ public class PrimaryNode : TreeNode
         {
             var node = new ExpressionNode();
             var token = lexer.GetNextToken();
-            children.Add(NodeFactory.ConstructNode(node, lexer, token, out var closingBrace));
+            expressionNode = NodeFactory.ConstructNode(node, lexer, token, out var closingBrace);
+            children.Add(expressionNode);
+
+            IsConst = node.IsConst;
 
             if (closingBrace is not RightBrace)
             {
@@ -37,7 +44,36 @@ public class PrimaryNode : TreeNode
             children.Add(NodeFactory.ConstructNode(new FunctionLiteralNode(), lexer, firstToken, out lastToken));
             return;
         }
-        
-        children.Add(NodeFactory.ConstructNode(new LiteralNode(), lexer, firstToken, out lastToken));
+
+        literalNode = NodeFactory.ConstructNode(new LiteralNode(), lexer, firstToken, out lastToken);
+        children.Add(literalNode);
+        IsConst = true;
+    }
+    
+    protected override void Calculate()
+    {
+        // TODO: Add calculation when the child node is an expression
+        if (literalNode != null || expressionNode != null)
+        {
+            var node = literalNode ?? expressionNode as ConstReduceableNode;
+            
+            ValueType = node.GetValueType();
+            if (node.GetValueType() == ConstValueType.Int)
+            {
+                IntValue = node.GetIntValue();
+            }
+            if (node.GetValueType() == ConstValueType.Real)
+            {
+                RealValue = node.GetRealValue();
+            }
+            if (node.GetValueType() == ConstValueType.Boolean)
+            {
+                BoolValue = node.GetBoolValue();
+            }
+        }
+        else
+        {
+            throw new SemanticException("Primary: Got to calculating even though nodes are null");
+        }
     }
 }

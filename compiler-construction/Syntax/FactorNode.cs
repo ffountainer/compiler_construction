@@ -1,11 +1,14 @@
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Operators;
 
 namespace compiler_construction.Syntax;
 
-public class FactorNode : TreeNode
+public class FactorNode : ConstReduceableNode
 {
     private bool calledByForHeader;
+    private List<Token> operators = [];
+    private List<ConstReduceableNode> operands = [];
 
     public FactorNode(bool calledByForHeader = false)
     {
@@ -19,20 +22,90 @@ public class FactorNode : TreeNode
     
     public override void ReadTokens(out Token lastToken)
     {
+        IsConst = true;
+        
         Token opToken;
         var token = firstToken;
+        
         do
         {
-            var node = new TermNode(calledByForHeader && firstToken == token);
-            children.Add(NodeFactory.ConstructNode(node, lexer, token, out opToken));
+            var node = new TermNode(calledByForHeader && firstToken == token); 
+            node = NodeFactory.ConstructNode(node, lexer, token, out opToken);
+            children.Add(node);
+            operands.Add(node);
+
+            if (!node.IsConst && IsConst)
+            {
+                IsConst = false;
+            }
 
             if (opToken is Plus || opToken is Minus)
             {
+                operators.Add(opToken);
                 token = lexer.GetNextToken();
             }
         } while (opToken is Plus || opToken is Minus);
 
         lastToken = opToken;
         Debug.Log($"Factor returns {lastToken.GetSourceText()} as last token");
+    }
+
+    protected override void Calculate()
+    {
+        bool hasReal = false;
+        bool hasBool = false;
+        foreach (var operand in operands)
+        {
+            if (operand.GetValueType() == ConstValueType.Boolean)
+            {
+                hasBool = true;
+            }
+            else if (operand.GetValueType() == ConstValueType.Real)
+            {
+                hasReal = true;
+            }
+        }
+
+        if (hasBool)
+        {
+            if (operators.Count > 0)
+            {
+                throw new SemanticException("Cannot add or subtract with booleans");
+            }
+
+            ValueType = ConstValueType.Boolean;
+            BoolValue = operands.First().GetBoolValue();
+            
+            return;
+        }
+        
+        ValueType = hasReal ? ConstValueType.Real : ConstValueType.Int;
+        
+        if (ValueType == ConstValueType.Real) RealValue =  operands.First().GetRealValue();
+        else IntValue =  operands.First().GetIntValue();
+
+        for (int i = 0; i < operators.Count; i++)
+        {
+            var op = operators[i];
+            var rightOperand = operands[i + 1];
+            
+            if (ValueType == ConstValueType.Real)
+            {
+                double rightOperandValue = rightOperand.GetValueType() == ConstValueType.Real
+                    ? rightOperand.GetRealValue()
+                    : rightOperand.GetIntValue();
+                
+                RealValue = op is Plus
+                    ? RealValue + rightOperandValue
+                    // Else operator is Minus
+                    : RealValue -  rightOperandValue;
+            }
+            else // Int
+            {
+                IntValue = op is Plus
+                    ? IntValue + rightOperand.GetIntValue()
+                    : IntValue - rightOperand.GetIntValue();
+            }
+        }
     }
 }

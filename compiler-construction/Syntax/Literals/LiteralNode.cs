@@ -1,3 +1,4 @@
+using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
 using compiler_construction.Tokenization.Types;
@@ -8,7 +9,7 @@ namespace compiler_construction.Syntax.Literals;
 /// <summary>
 /// Places following token as last token
 /// </summary>
-public class LiteralNode : TreeNode
+public class LiteralNode : ConstReduceableNode
 {
     public override string GetName()
     {
@@ -51,5 +52,28 @@ public class LiteralNode : TreeNode
         }
 
         lastToken = lexer.GetNextToken();
+    }
+
+    protected override void Calculate()
+    {
+        var node = children.First();
+        if (node is IntegerLiteral integerLiteral)
+        {
+            IntValue = integerLiteral.Value;
+            ValueType = ConstValueType.Int;
+            IsConst =  true;
+        }
+        else if (node is RealLiteral realLiteral)
+        {
+            RealValue = realLiteral.Value;
+            ValueType = ConstValueType.Real;
+            IsConst =  true;
+        }
+        else if (node is BooleanLiteral booleanLiteral)
+        {
+            BoolValue = booleanLiteral.Value;
+            ValueType = ConstValueType.Boolean;
+            IsConst = true;
+        }
     }
 }

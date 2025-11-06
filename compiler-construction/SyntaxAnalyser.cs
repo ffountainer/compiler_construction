@@ -9,6 +9,7 @@ namespace compiler_construction;
 class SyntaxAnalyzer
 {
     private Lexer _lexer;
+    private ProgramNode _program;
 
     public static Scope currentScope = new Scope(new Hashtable(), null);
     public SyntaxAnalyzer(Lexer lexer)
@@ -46,4 +47,9 @@ class SyntaxAnalyzer
         var program = NodeFactory.ConstructNode(new ProgramNode(), _lexer, _lexer.GetNextToken());
         program.PrintTree();
     }
+
+    public ProgramNode GetTree()
+    {
+        return _program;
+    } 
 }

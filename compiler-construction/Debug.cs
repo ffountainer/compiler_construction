@@ -13,6 +13,14 @@ public static class Debug
         }
     }
 
+    public static void Log(string tag, object message)
+    {
+        if (debug)
+        {
+            Console.WriteLine($"Debug [{tag}]: {message}");
+        }
+    }
+
     public static void Info(object message)
     {
         if (info)

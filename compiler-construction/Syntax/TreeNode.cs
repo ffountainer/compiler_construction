@@ -38,6 +38,22 @@ public abstract class TreeNode
         }
     }
 
+    public List<TreeNode> GetChildren()
+    {
+        return children;
+    }
+
+    public void ClearChildren()
+    {
+        children.Clear();
+    }
+
+    public TreeNode AddChild(TreeNode child)
+    {
+        children.Add(child);
+        return this;
+    }
+
     public override string ToString()
     {
         var builder = new StringBuilder().Append("{ ");
