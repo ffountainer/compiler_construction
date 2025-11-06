@@ -11,7 +11,7 @@ class Program
     
     private static void Main(string[] args)
     {
-        string path = "../../../tests/semantics/optimisations/redundant/test1.d";
+        string path = "../../../tests/semantics/decl_variables_usage/test1.d";
         // string path = "../../../tests/tuples/test4.d";
         Debug.Log("Hello World!");
 

@@ -14,7 +14,7 @@ public class ProgramNode : TreeNode
         {
             var node = NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken);
             
-            if (!node.IsMeaningless())
+            if (!node.IsRedundantStatement())
             {
                 children.Add(node);
             }

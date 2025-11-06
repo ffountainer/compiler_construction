@@ -7,14 +7,14 @@ namespace compiler_construction.Syntax;
 
 public class StatementNode : TreeNode
 {
-    private bool meaninglessIf = false;
+    private bool isRedundant = false;
     
     public override string GetName()
     {
         return "Statement";
     }
 
-    public bool IsMeaningless() => meaninglessIf;
+    public bool IsRedundantStatement() => isRedundant;
     
     public override void ReadTokens(out Token lastToken)
     {
@@ -30,11 +30,13 @@ public class StatementNode : TreeNode
             var node = NodeFactory.ConstructNode(new IfNode(), lexer, firstToken, out terminator);
             children.Add(node);
 
-            meaninglessIf = !node.GetEverExecutes();
+            isRedundant = !node.GetEverExecutes();
         }
         else if (firstToken is While)
         {
-            children.Add(NodeFactory.ConstructNode(new WhileLoopNode(), lexer, firstToken, out terminator));
+            var node = NodeFactory.ConstructNode(new WhileLoopNode(), lexer, firstToken, out terminator);
+            children.Add(node);
+            isRedundant = node.IsConditionAlwaysFalse();
         }
         else if (firstToken is For)
         {
