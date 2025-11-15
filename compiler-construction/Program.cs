@@ -11,13 +11,14 @@ class Program
     
     private static void Main(string[] args)
     {
-        string path = "../../../tests/arrays/test1.d";
+        string path = "../../../tests/semantics/optimisations/constants/test1.d";
         // string path = "../../../tests/semantics/optimisations/unreachable/test1.d";
         Debug.Log("Hello World!");
 
         // LexerShowcase(path);
-        SyntaxAnalyzerShowcase(path);
-        // SemanticAnalyzerShowcase(path);
+        // SyntaxAnalyzerShowcase(path);
+        InterpreterShowcase(path);
+        
     }
 
     private static void LexerShowcase(string path)
@@ -49,19 +50,18 @@ class Program
         filestream.Close();
     }
 
-    private static void SemanticAnalyzerShowcase(string path)
+    private static void InterpreterShowcase(string path)
     {
         var filestream = new FileStream(path, FileMode.Open);
         var streamReader = new StreamReader(filestream);
         
         var lexer = new Lexer(path, streamReader);
         var analyzer = new SyntaxAnalyzer(lexer);
-        Console.WriteLine("Syntax Analyzer: AST before optimizations");
         analyzer.PrintAST();
-        var tree = analyzer.GetTree();
-        Console.WriteLine("Semantic Analyzer: AST after optimizations");
-        var optimiser = new SemanticAnalyser(tree);
-        optimiser.PrintOptimisedTree();
+
+        var interpreter = new Interpreter(analyzer.GetTree());
+        interpreter.Interpret();
+        
         streamReader.Close();
         filestream.Close();
     }

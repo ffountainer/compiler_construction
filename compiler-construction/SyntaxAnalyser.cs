@@ -45,6 +45,7 @@ class SyntaxAnalyzer
     public void PrintAST()
     {
         var program = NodeFactory.ConstructNode(new ProgramNode(), _lexer, _lexer.GetNextToken());
+        _program = program;
         program.PrintTree();
     }
 
