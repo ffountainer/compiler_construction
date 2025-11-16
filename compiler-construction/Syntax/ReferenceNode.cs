@@ -1,5 +1,7 @@
 using System.Collections;
+using compiler_construction.Intrepretation;
 using compiler_construction.Semantics;
+using compiler_construction.Syntax.Literals;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
 using compiler_construction.Tokenization.Keywords;
@@ -10,6 +12,17 @@ namespace compiler_construction.Syntax;
 public class ReferenceNode : TreeNode
 {
     private bool calledByForHeader;
+
+    private WhatReference whatReference;
+    
+    private IdentifierNode identifier;
+    
+    public IdentifierNode GetIdentifier()
+    {
+        return identifier;
+    }
+    
+    public WhatReference getWhatReference() => whatReference;
 
     public ReferenceNode(bool calledByForHeader = false)
     {
@@ -29,6 +42,11 @@ public class ReferenceNode : TreeNode
         {
             throw new UnexpectedTokenException("Expected identifier but got " + firstToken);
         }
+        
+        var ident = NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken);
+        identifier = ident;
+        children.Add(ident);
+        
         bool flag = false;
         var check_scope = SyntaxAnalyzer.GetCurrentScope();
         do
@@ -81,19 +99,22 @@ public class ReferenceNode : TreeNode
 
         if (opToken is LeftBracket)
         {
+            whatReference = WhatReference.Array;
             children.Add(NodeFactory.ConstructNode(new ArrayElementNode(), lexer, opToken, out lastToken));
         }
         else if (opToken is LeftBrace)
         {
+            whatReference = WhatReference.Call;
             children.Add(NodeFactory.ConstructNode(new FunctionCallNode(), lexer, opToken, out lastToken));
         }
         else if (opToken is Point)
         {
+            whatReference = WhatReference.Tuple;
             children.Add(NodeFactory.ConstructNode(new TupleAccessNode(), lexer, opToken, out lastToken));
         }
         else
         {
-            children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken));
+            whatReference = WhatReference.Ident;
             lastToken = opToken;
             Debug.Log($"Constructed simple ident-ref, returning {lastToken.GetSourceText()} as last token");
         }

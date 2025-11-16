@@ -22,4 +22,11 @@ public class IdentifierNode : TreeNode
         lastToken = firstToken;
         Value = firstToken.GetSourceText();
     }
+    
+    public override bool Equals(object? obj)
+    {
+        return obj is IdentifierNode other && Value == other.Value;
+    }
+
+    public override int GetHashCode() => Value.GetHashCode();
 }

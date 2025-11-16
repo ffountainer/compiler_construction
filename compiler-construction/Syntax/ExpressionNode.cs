@@ -14,6 +14,15 @@ public class ExpressionNode : ConstReduceableNode
     private List<ConstReduceableNode> operands = [];
     private List<Token> operators = [];
 
+    public List<ConstReduceableNode> GetOperands()
+    {
+        return operands;
+    }
+
+    public List<Token> GetOperators()
+    {
+        return operators;
+    }
     public ExpressionNode(bool calledByForHeader = false)
     {
         this.calledByForHeader = calledByForHeader;

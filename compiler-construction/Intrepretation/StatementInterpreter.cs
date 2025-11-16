@@ -19,8 +19,16 @@ public class StatementInterpreter
                 case(DeclarationNode declarationNode):
                     var declaration = new DeclarationInterpreter(declarationNode);
                     declaration.Interpret();
+                    Debug.Log("The result of the new declaration:");
+                    foreach (IdentifierNode name in Interpreter.GetIdentifiers().Keys.ToList())
+                    {
+                        Debug.Log($">> {name.GetValue()} + {name}");
+                    }
                     break;
                 case(AssignmentNode assignmentNode):
+                    var assignment = new AssignmentInterpreter(assignmentNode);
+                    assignment.Interpret();
+                    // TODO: all assignments apart from simple idents
                     break;
                 case(IfNode ifNode):
                     break;
@@ -35,6 +43,7 @@ public class StatementInterpreter
                 case(ExitNode exitNode):
                     break;
                 case(PrintNode printNode):
+                    
                     break;
                 default:
                     throw new InterpretationException("Interpreter: no valid statement detected");

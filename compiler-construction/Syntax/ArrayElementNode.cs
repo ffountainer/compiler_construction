@@ -18,6 +18,7 @@ public class ArrayElementNode : TreeNode
             .ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out var terminator);
         
         children.Add(node);
+        
 
         if (terminator is not RightBracket)
         {
