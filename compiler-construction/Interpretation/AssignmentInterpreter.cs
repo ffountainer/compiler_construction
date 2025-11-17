@@ -1,7 +1,7 @@
 using compiler_construction.Syntax;
 using compiler_construction.Syntax.Literals;
 
-namespace compiler_construction.Intrepretation;
+namespace compiler_construction.Interpretation;
 
 public class AssignmentInterpreter
 {
@@ -39,6 +39,8 @@ public class AssignmentInterpreter
                 Console.WriteLine(Interpreter.GetIdentifiers()[tupleName].GetOperands());
             }
         }
+        
+        // DO NOT INTERPRET REFERENCE IF YOU ARE HERE
         
     }
 }

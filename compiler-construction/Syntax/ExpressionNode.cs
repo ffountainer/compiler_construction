@@ -1,3 +1,4 @@
+using compiler_construction.Interpretation;
 using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Keywords;
@@ -18,6 +19,8 @@ public class ExpressionNode : ConstReduceableNode
     {
         return operands;
     }
+
+    public WhatExpression WhatExpression;
 
     public List<Token> GetOperators()
     {
@@ -129,7 +132,7 @@ public class ExpressionNode : ConstReduceableNode
 
         if (operators.Count > 0)
         {
-            // Sho;ud never throw
+            // Should never throw
             throw new SemanticException($"{operators.Count} operators left after reduction...");
         }
         

@@ -3,9 +3,13 @@ using compiler_construction.Tokenization.BoundingOperators;
 
 namespace compiler_construction.Syntax;
 
-public class ArrayElementNode : TreeNode
+public class ArrayAccessNode : TreeNode
 {
     private ReferenceNode reference;
+    
+    private ExpressionNode arrayIndex;
+    
+    public ExpressionNode GetArrayIndex() => arrayIndex;
     
     public override string GetName()
     {
@@ -18,6 +22,7 @@ public class ArrayElementNode : TreeNode
             .ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out var terminator);
         
         children.Add(node);
+        arrayIndex = node;
         
 
         if (terminator is not RightBracket)

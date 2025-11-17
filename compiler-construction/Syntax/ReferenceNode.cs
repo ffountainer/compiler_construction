@@ -1,5 +1,5 @@
 using System.Collections;
-using compiler_construction.Intrepretation;
+using compiler_construction.Interpretation;
 using compiler_construction.Semantics;
 using compiler_construction.Syntax.Literals;
 using compiler_construction.Tokenization;
@@ -15,7 +15,26 @@ public class ReferenceNode : TreeNode
 
     private WhatReference whatReference;
     
+    private WhatTupleReference whatTupleReference;
+
+    public WhatTupleReference GetWhatTupleReference()
+    {
+        return whatTupleReference;
+    }
+    
     private IdentifierNode identifier;
+
+    private ExpressionNode arrayIndex;
+    
+    public ExpressionNode GetArrayIndex() => arrayIndex;
+    
+    private IdentifierNode tupleAccessIdentifier;
+    
+    public IdentifierNode GetTupleAccessIdentifier() => tupleAccessIdentifier;
+
+    private int tupleIndexInt;
+    
+    public int GetTupleIndexInt() => tupleIndexInt;
     
     public IdentifierNode GetIdentifier()
     {
@@ -100,7 +119,9 @@ public class ReferenceNode : TreeNode
         if (opToken is LeftBracket)
         {
             whatReference = WhatReference.Array;
-            children.Add(NodeFactory.ConstructNode(new ArrayElementNode(), lexer, opToken, out lastToken));
+            var arrayAccess = NodeFactory.ConstructNode(new ArrayAccessNode(), lexer, opToken, out lastToken);
+            children.Add(arrayAccess);
+            arrayIndex = arrayAccess.GetArrayIndex();;
         }
         else if (opToken is LeftBrace)
         {
@@ -110,7 +131,17 @@ public class ReferenceNode : TreeNode
         else if (opToken is Point)
         {
             whatReference = WhatReference.Tuple;
-            children.Add(NodeFactory.ConstructNode(new TupleAccessNode(), lexer, opToken, out lastToken));
+            var tupleNode = NodeFactory.ConstructNode(new TupleAccessNode(), lexer, opToken, out lastToken);
+            children.Add(tupleNode);
+            if (tupleNode.GetWhatTupleReference() is WhatTupleReference.TupleByIdent)
+            {
+                tupleAccessIdentifier = tupleNode.GetTupleAccessIdentifier();
+            }
+            else if (tupleNode.GetWhatTupleReference() is WhatTupleReference.TupleByIndex)
+            {
+                tupleIndexInt = tupleNode.GetTupleIndex();
+            }
+            whatTupleReference = tupleNode.GetWhatTupleReference();
         }
         else
         {

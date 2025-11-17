@@ -1,4 +1,4 @@
-namespace compiler_construction.Intrepretation;
+namespace compiler_construction.Interpretation;
 
 public enum WhatExpression
 {
@@ -8,4 +8,6 @@ public enum WhatExpression
     StringExpr,
     TupleExpr,
     ArrayExpr,
+    NoneExpr,
+    FuncLiteralExpr,
 }

@@ -1,4 +1,4 @@
-using compiler_construction.Intrepretation;
+using compiler_construction.Interpretation;
 using compiler_construction.Syntax;
 namespace compiler_construction;
 

@@ -15,6 +15,16 @@ public class UnaryNode : ConstReduceableNode
     // LATER: Add storage for other 2 cases
     private Token? primaryOperator;
     private PrimaryNode primaryOperand;
+
+    public Token? GetPrimaryOperator()
+    {
+        return primaryOperator;
+    }
+
+    public PrimaryNode GetPrimaryOperand()
+    {
+        return primaryOperand;
+    }
     
     private bool calledByForHeader;
     

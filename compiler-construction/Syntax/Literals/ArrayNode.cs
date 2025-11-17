@@ -6,6 +6,7 @@ namespace compiler_construction.Syntax.Literals;
 
 public class ArrayNode : TreeNode
 {
+    
     public override string GetName()
     {
         return "Array";

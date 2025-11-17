@@ -1,4 +1,4 @@
-using compiler_construction.Intrepretation;
+using compiler_construction.Interpretation;
 using compiler_construction.Syntax.Literals;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Types;
@@ -13,6 +13,20 @@ public class TupleAccessNode : TreeNode
         return "TupleAccess";
     }
 
+    private int tupleIndex;
+    
+    private IdentifierNode tupleAccessIdentifier;
+
+    public IdentifierNode GetTupleAccessIdentifier()
+    {
+        return tupleAccessIdentifier;
+    }
+
+    public int GetTupleIndex()
+    {
+        return tupleIndex;
+    }
+
     public WhatTupleReference GetWhatTupleReference()
     {
         return _whatTupleReference;
@@ -23,13 +37,18 @@ public class TupleAccessNode : TreeNode
         var token = lexer.GetNextToken();
         if (token is Identifier)
         {
-            children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, token));
+            var node = NodeFactory.ConstructNode(new IdentifierNode(), lexer, token);
+            children.Add(node);
             _whatTupleReference = WhatTupleReference.TupleByIdent;
+            tupleAccessIdentifier = node;
         }
         else if (token is Int)
         {
-            children.Add(NodeFactory.ConstructNode(new IntegerLiteral(), lexer, token));
-            _whatTupleReference = WhatTupleReference.TupleByLiteral;
+            var indexInt = NodeFactory.ConstructNode(new IntegerLiteral(), lexer, token);
+            children.Add(indexInt);
+            _whatTupleReference = WhatTupleReference.TupleByIndex;
+            tupleIndex = indexInt.Value;
+
         }
         else
         {

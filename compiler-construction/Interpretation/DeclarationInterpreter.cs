@@ -1,6 +1,6 @@
 using compiler_construction.Syntax;
 
-namespace compiler_construction.Intrepretation;
+namespace compiler_construction.Interpretation;
 
 public class DeclarationInterpreter
 {

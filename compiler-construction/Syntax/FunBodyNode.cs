@@ -1,4 +1,5 @@
 using System.Collections;
+using compiler_construction.Interpretation;
 using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Keywords;
@@ -12,6 +13,23 @@ public class FunBodyNode : TreeNode
     {
         return "FunBody";
     }
+    
+    private WhatFunction WhatFunc;
+    private List<StatementNode> Body;
+    private ExpressionNode shortFuncExpr;
+    
+    public WhatFunction GetWhatFunc()
+    {
+        return WhatFunc;
+    }
+    public List<StatementNode> GetBody()
+    {
+        return Body;
+    }
+    public ExpressionNode GetShortFuncExpr()
+    {
+        return shortFuncExpr;
+    }
 
     public override void ReadTokens(out Token lastToken)
     {
@@ -21,12 +39,18 @@ public class FunBodyNode : TreeNode
         
         if (firstToken is EqualGreater)
         {
-            children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));
+            var node = NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken);
+            children.Add(node);
+            shortFuncExpr = node;
+            WhatFunc = WhatFunction.Short;
+
         }
         else if (firstToken is Is)
         {
-            children.Add(NodeFactory.ConstructNode(new BodyNode(), lexer, lexer.GetNextToken(), out lastToken));
-
+            var node = NodeFactory.ConstructNode(new BodyNode(), lexer, lexer.GetNextToken(), out lastToken);
+            children.Add(node);
+            Body = node.GetBody();
+            WhatFunc = WhatFunction.Full;
             if (lastToken is not End)
             {
                 throw new UnexpectedTokenException($"Expected end, got {lastToken}");

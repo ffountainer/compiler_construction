@@ -1,4 +1,5 @@
 using System.Collections;
+using compiler_construction.Interpretation;
 using compiler_construction.Semantics;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.BoundingOperators;
@@ -15,6 +16,31 @@ public class FunctionLiteralNode : TreeNode
     {
         return "FunctionLiteral";
     }
+    
+    private List<String> arguments;
+    private WhatFunction WhatFunc;
+    private List<StatementNode> Body;
+    private ExpressionNode shortFuncExpr;
+
+    public ExpressionNode GetShortFuncExpr()
+    {
+        return shortFuncExpr;
+    }
+
+    public List<StatementNode> GetBody()
+    {
+        return Body;
+    }
+    
+    public List<String> GetArguments()
+    {
+        return arguments;
+    }
+
+    public WhatFunction GetWhatFunc()
+    {
+        return WhatFunc;
+    }
 
     public override void ReadTokens(out Token lastToken)
     {
@@ -28,7 +54,9 @@ public class FunctionLiteralNode : TreeNode
             {
                 token = lexer.GetNextToken();
                 SyntaxAnalyzer.AddToCurScope(token.GetSourceText(), true);
-                children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, token));
+                var node = NodeFactory.ConstructNode(new IdentifierNode(), lexer, token);
+                children.Add(node);
+                arguments.Add(node.GetValue());
                 token = lexer.GetNextToken();
             } while (token is Comma);
 
@@ -39,8 +67,19 @@ public class FunctionLiteralNode : TreeNode
             
             token = lexer.GetNextToken();
         }
-        
-        children.Add(NodeFactory.ConstructNode(new FunBodyNode(), lexer, token, out lastToken));
+
+        var funBody = NodeFactory.ConstructNode(new FunBodyNode(), lexer, token, out lastToken);
+        children.Add(funBody);
+        WhatFunc = funBody.GetWhatFunc();
+        if (WhatFunc is WhatFunction.Full)
+        {
+            Body = funBody.GetBody();
+        }
+
+        if (WhatFunc is WhatFunction.Short)
+        {
+            shortFuncExpr = funBody.GetShortFuncExpr();
+        }
         SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetCurrentScope().GetParentScope());
         IsFunc = false;
     }

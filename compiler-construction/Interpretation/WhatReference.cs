@@ -1,4 +1,4 @@
-namespace compiler_construction.Intrepretation;
+namespace compiler_construction.Interpretation;
 
 public enum WhatReference
 {
@@ -11,5 +11,5 @@ public enum WhatReference
 public enum WhatTupleReference
 {
     TupleByIdent,
-    TupleByLiteral
+    TupleByIndex
 }

@@ -15,6 +15,14 @@ public class TupleElementNode : TreeNode
 
     public IdentifierNode? key;
     public ExpressionNode value;
+
+    
+    public TupleElementNode() { }
+    public TupleElementNode(IdentifierNode? key, ExpressionNode value)
+    {
+        this.key = key;
+        this.value = value;
+    }
     public override void ReadTokens(out Token lastToken)
     {
         var node = NodeFactory.ConstructNode(new ExpressionNode(true), lexer, firstToken, out var colorEqual);

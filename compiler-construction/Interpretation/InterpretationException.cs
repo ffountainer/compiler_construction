@@ -1,4 +1,4 @@
-namespace compiler_construction.Intrepretation;
+namespace compiler_construction.Interpretation;
 
 public class InterpretationException : Exception
 {

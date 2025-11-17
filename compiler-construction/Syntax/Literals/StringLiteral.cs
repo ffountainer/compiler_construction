@@ -4,6 +4,7 @@ namespace compiler_construction.Syntax.Literals;
 
 public class StringLiteral : TreeNode
 {
+    public string Value;
     public override string GetName()
     {
         return "STRING" + " " + firstToken.GetSourceText();
@@ -11,6 +12,7 @@ public class StringLiteral : TreeNode
 
     public override void ReadTokens(out Token lastToken)
     {
+        Value = firstToken.GetSourceText();
         lastToken = firstToken;
     }
 }

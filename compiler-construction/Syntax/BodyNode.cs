@@ -9,6 +9,13 @@ public class BodyNode : TreeNode
     {
         return "Body";
     }
+    
+    private List<StatementNode> Body;
+    
+    public List<StatementNode> GetBody()
+    {
+        return Body;
+    }
 
     override public void ReadTokens(out Token lastToken)
     {
@@ -17,7 +24,9 @@ public class BodyNode : TreeNode
         bool hasStatements = false;
         while (token is not End && token is not Else)
         {
-            children.Add(NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken));
+            var node = NodeFactory.ConstructNode(new StatementNode(), lexer, token, out lastToken);
+            children.Add(node);
+            Body.Add(node);
             hasStatements = true;
             token = lastToken;
             
