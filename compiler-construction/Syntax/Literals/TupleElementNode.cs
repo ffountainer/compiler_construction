@@ -15,24 +15,21 @@ public class TupleElementNode : TreeNode
 
     public IdentifierNode? key;
     public ExpressionNode value;
-
     
     public TupleElementNode() { }
-    public TupleElementNode(IdentifierNode? key, ExpressionNode value)
+    public TupleElementNode(IdentifierNode? key, ExpressionNode value, List<TreeNode> ch)
     {
         this.key = key;
         this.value = value;
+        children = ch;
     }
     public override void ReadTokens(out Token lastToken)
     {
-        var node = NodeFactory.ConstructNode(new ExpressionNode(true), lexer, firstToken, out var colorEqual);
-        if (colorEqual is ColonEqual)
+        var node = NodeFactory.ConstructNode(new ExpressionNode(calledByForHeader:true), lexer, firstToken, out var colonEqual);
+        if (colonEqual is ColonEqual)
         {
             var ident = NodeFactory.ConstructNode(new IdentifierNode(), lexer, firstToken);
-            if (key != null)
-            {
-                key = ident;
-            }
+            key = ident;
             children.Add(ident);
             var expr = NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken);
             value = expr;
@@ -41,7 +38,8 @@ public class TupleElementNode : TreeNode
         else
         {
             children.Add(node);
-            lastToken = colorEqual;
+            value = node;
+            lastToken = colonEqual;
         }
     }
 }

@@ -9,13 +9,16 @@ public class ReferenceInterpreter : Interpretable
     public ReferenceInterpreter(ReferenceNode reference)
     {
         _reference = reference;
+        children = reference.GetChildren();
     }
     public override void Interpret()
     {
+        Debug.Log("Started to interpret reference");
         IdentifierNode referenceIdent =  (IdentifierNode)_reference.GetChildren().First();
         switch (_reference.getWhatReference())
         {
             case(WhatReference.Ident):
+                Debug.Log("The reference is by ident");
                 ExpressionNode expr = Interpreter.GetIdentifiers()[referenceIdent];
                 if (expr == null)
                 {
@@ -27,6 +30,7 @@ public class ReferenceInterpreter : Interpretable
                 InheritValues(exprInterpreter, $"Interpretation: error trying to interpret reference for {referenceIdent.GetValue()}");
                 break;
             case(WhatReference.Array):
+                Debug.Log("The reference is by array element");
                 ExpressionNode referencedArray = Interpreter.GetIdentifiers()[referenceIdent];
                 if (referencedArray == null)
                 {
@@ -48,27 +52,33 @@ public class ReferenceInterpreter : Interpretable
                 InheritValues(arrayElementInterpreter, "Interpretation: cannot interpret array element");
                 break;
             case(WhatReference.Tuple):
-                // TODO: RECHECK AND FINISH
+                Debug.Log("The reference is by tuple");
                 ExpressionNode referencedTuple = Interpreter.GetIdentifiers()[referenceIdent];
                 if (referencedTuple == null)
                 {
                     throw new InterpretationException(
                         $"Interpretation: cannot reference a null value from identifier {referenceIdent.GetValue()}");
                 }
+                Debug.Log($"Reference: got tuple with name {referenceIdent.GetValue()}");
+                Debug.Log("Starting to interpret tuple expression");
                 ExpressionInterpreter tupleInterpreter = new ExpressionInterpreter(referencedTuple);
                 tupleInterpreter.Interpret();
+                Debug.Log("Finished to interpret tuple expression");
+                
                 switch (_reference.GetWhatTupleReference())
                 {
                     case(WhatTupleReference.TupleByIndex):
+                        Debug.Log("The tuple reference is by index");
                         int index = _reference.GetTupleIndexInt();
-                        var tupleElementByInd = GetTupleElementByIndex(index - 1);
+                        var tupleElementByInd = GetTupleElementByIndex(tupleInterpreter.GetTupleValue(), index - 1);
                         ExpressionInterpreter tupleElementByIndInterpreter = new ExpressionInterpreter(tupleElementByInd);
                         tupleElementByIndInterpreter.Interpret();
                         InheritValues(tupleElementByIndInterpreter, "Interpretation: cannot interpret tuple element (accessed by index)");
                         break;
                     case(WhatTupleReference.TupleByIdent):
+                        Debug.Log("The tuple reference is by ident");
                         IdentifierNode accessIdent =  _reference.GetTupleAccessIdentifier();
-                        var tupleElementByKey = GetTupleElementByKey(accessIdent);
+                        var tupleElementByKey = GetTupleElementByKey(tupleInterpreter.GetTupleValue(), accessIdent);
                         ExpressionInterpreter tupleElementByKeyInterpreter = new ExpressionInterpreter(tupleElementByKey);
                         tupleElementByKeyInterpreter.Interpret();
                         InheritValues(tupleElementByKeyInterpreter, "Interpretation: cannot interpret tuple element (accessed by key)");

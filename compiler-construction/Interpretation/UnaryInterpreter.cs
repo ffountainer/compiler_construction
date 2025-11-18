@@ -12,10 +12,12 @@ public class UnaryInterpreter : Interpretable
     public UnaryInterpreter(UnaryNode node)
     {
         _unary = node;
+        children = node.GetChildren();
     }
     
     public override void Interpret()
     {
+        Debug.Log("Started to interpret unary");
         // case Reference
         if (_unary.GetChildren().Count == 1 && _unary.GetChildren().First() is ReferenceNode reference)
         {

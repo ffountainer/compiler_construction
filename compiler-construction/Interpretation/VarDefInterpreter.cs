@@ -2,16 +2,17 @@ using compiler_construction.Syntax;
 
 namespace compiler_construction.Interpretation;
 
-public class VarDefInterpreter
+public class VarDefInterpreter : Interpretable
 {
     private VariableDefinitionNode _definition;
 
     public VarDefInterpreter(VariableDefinitionNode definition)
     {
-        this._definition = definition;
+        _definition = definition;
+        children = definition.GetChildren();
     }
 
-    public void Interpret()
+    public override void Interpret()
     {
         
         IdentifierNode identifier = (IdentifierNode)_definition.GetChildren().First();

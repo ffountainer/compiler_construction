@@ -11,31 +11,33 @@ public class ExpressionInterpreter : Interpretable
     public ExpressionInterpreter(ExpressionNode expression)
     {
         _expression = expression;
+        children = expression.GetChildren();
     }
     
     private List<TreeNode> operands = [];
     private List<Token> operators = [];
 
     public override void Interpret()
-    { 
+    {
+        Debug.Log(">>>>>>>>>>>> IM INTERPRETING EXPRESSION");
         operands = _expression.GetChildren();
         List<RelationInterpreter> relationInterpreters = new List<RelationInterpreter>(); 
         operators = _expression.GetOperators();
-
+        
         foreach (RelationNode node in operands)
         {
             RelationInterpreter relationInterpreter = new RelationInterpreter(node);
             relationInterpreters.Add(relationInterpreter);
             relationInterpreter.Interpret();
 
-            if (relationInterpreter.GetWhatExpression() != WhatExpression.BoolExpr)
+            if (relationInterpreter.GetWhatExpression() != WhatExpression.BoolExpr && relationInterpreters.Count > 1)
             {
                 throw new InterpretationException("Cannot apply logical operator to a none-boolean relations");
             }
         }
-
         if (relationInterpreters.Count == 1)
         {
+            Debug.Log("Expression consists of only one relation");
             InheritValues(relationInterpreters[0], "Interpretation: error interpreting expression while inheriting from a single relation");
         }
         else
@@ -83,7 +85,7 @@ public class ExpressionInterpreter : Interpretable
             {
                 throw new InterpretationException($"{operators.Count} operators left after reduction...");
             }
-        
+            
             BoolValue = operandValues[0];
             WhatExpr = WhatExpression.BoolExpr;
         }
@@ -104,21 +106,22 @@ public class ExpressionInterpreter : Interpretable
 
     public void PrintExpression()
     {
-        switch (_expression.WhatExpression)
+        switch (WhatExpr)
         {
             case(WhatExpression.IntegerExpr):
-                Console.WriteLine(IntValue);
+                Console.Write(IntValue + " ");
                 break;
             case(WhatExpression.RealExpr):
-                Console.WriteLine(RealValue);
+                Console.Write(RealValue + " ");
                 break;
             case(WhatExpression.BoolExpr):
-                Console.WriteLine(BoolValue);
+                Console.Write(BoolValue + " ");
                 break;
             case(WhatExpression.StringExpr):
-                Console.WriteLine(StringValue);
+                Console.Write(StringValue + " ");
                 break;
             case(WhatExpression.ArrayExpr):
+                Console.Write("[ ");
                 foreach (var element in ArrayValue)
                 {
                     ExpressionInterpreter elementInterpreter = new ExpressionInterpreter(element);
@@ -138,15 +141,18 @@ public class ExpressionInterpreter : Interpretable
                             Console.Write(elementInterpreter.GetStringValue() + " ");
                             break;
                         case(WhatExpression.ArrayExpr):
-                            foreach (var innerElementArray in ArrayValue)
+                            Console.Write("[ ");
+                            foreach (var innerElementArray in elementInterpreter.GetArrayValue())
                             {
                                 ExpressionInterpreter innerElementArrayInterpreter = new ExpressionInterpreter(innerElementArray);
                                 innerElementArrayInterpreter.Interpret();
                                 innerElementArrayInterpreter.PrintExpression();
                             }
+                            Console.Write("] ");
                             break;
                         case(WhatExpression.TupleExpr):
-                            foreach (var innerTupleArray in TupleValue)
+                            Console.Write("{ ");
+                            foreach (var innerTupleArray in elementInterpreter.TupleValue)
                             {
                                 ExpressionNode innerElementTuple = innerTupleArray.value;
                                 IdentifierNode key = innerTupleArray.key;
@@ -158,6 +164,7 @@ public class ExpressionInterpreter : Interpretable
                                 }
                                 innerElementTupleInterpreter.PrintExpression();
                             }
+                            Console.Write("} ");
                             break;
                         case(WhatExpression.NoneExpr):
                             throw new InterpretationException("Cannot print a none value");
@@ -167,10 +174,10 @@ public class ExpressionInterpreter : Interpretable
                             throw new InterpretationException("Cannot print an array");
                     }
                 }
-                Console.WriteLine();
+                Console.Write("] ");
                 break;
             case(WhatExpression.TupleExpr):
-
+                Console.Write("{ ");
                 foreach (var element in TupleValue)
                 {
                     IdentifierNode ident = element.key;
@@ -178,7 +185,7 @@ public class ExpressionInterpreter : Interpretable
                     
                     if (ident != null)
                     {
-                        Console.Write(ident.GetValue() + ": ");
+                        Console.Write(ident.GetValue() + ":");
                     }
                     
                     ExpressionInterpreter elementInterpreter = new ExpressionInterpreter(value);
@@ -198,15 +205,18 @@ public class ExpressionInterpreter : Interpretable
                             Console.Write(elementInterpreter.GetStringValue() + " ");
                             break;
                         case(WhatExpression.ArrayExpr):
-                            foreach (var innerElementArray in ArrayValue)
+                            Console.Write("[ ");
+                            foreach (var innerElementArray in elementInterpreter.ArrayValue)
                             {
                                 ExpressionInterpreter innerElementArrayInterpreter = new ExpressionInterpreter(innerElementArray);
                                 innerElementArrayInterpreter.Interpret();
                                 innerElementArrayInterpreter.PrintExpression();
                             }
+                            Console.Write("] ");
                             break;
                         case(WhatExpression.TupleExpr):
-                            foreach (var innerTupleArray in TupleValue)
+                            Console.Write("{ ");
+                            foreach (var innerTupleArray in elementInterpreter.TupleValue)
                             {
                                 ExpressionNode innerElementTuple = innerTupleArray.value;
                                 IdentifierNode key = innerTupleArray.key;
@@ -214,10 +224,11 @@ public class ExpressionInterpreter : Interpretable
                                 innerElementTupleInterpreter.Interpret();
                                 if (key != null)
                                 {
-                                    Console.Write(key.GetValue() + ": ");
+                                    Console.Write(key.GetValue() + ":");
                                 }
                                 innerElementTupleInterpreter.PrintExpression();
                             }
+                            Console.Write("} ");
                             break;
                         case(WhatExpression.NoneExpr):
                             throw new InterpretationException("Cannot print a none value");
@@ -227,8 +238,7 @@ public class ExpressionInterpreter : Interpretable
                             throw new InterpretationException("Cannot print an array");
                     }
                 }
-                
-                Console.WriteLine();
+                Console.Write("} ");
                 break;
             case(WhatExpression.NoneExpr):
                 throw new InterpretationException("Cannot print a none value");

@@ -59,6 +59,7 @@ class Program
         var analyzer = new SyntaxAnalyzer(lexer);
         analyzer.PrintAST();
 
+        Console.WriteLine("Interpretation:");
         var interpreter = new Interpreter(analyzer.GetTree());
         interpreter.Interpret();
         

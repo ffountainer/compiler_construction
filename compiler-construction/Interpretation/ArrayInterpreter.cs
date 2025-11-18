@@ -10,6 +10,7 @@ public class ArrayInterpreter : Interpretable
     public ArrayInterpreter(ArrayNode array)
     {
         _array = array;
+        children = array.GetChildren();
     }
     public override void Interpret()
     {

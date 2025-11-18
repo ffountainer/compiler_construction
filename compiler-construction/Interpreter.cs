@@ -13,6 +13,11 @@ public class Interpreter
         identifiers.Add(identifier, expression);
     }
 
+    public static void SetIdentifier(IdentifierNode identifier, ExpressionNode expression)
+    {
+        identifiers[identifier] = expression;
+    }
+
     public static Dictionary<IdentifierNode, ExpressionNode?> GetIdentifiers()
     {
         return identifiers;
@@ -25,8 +30,11 @@ public class Interpreter
 
     public void Interpret()
     {
+        int i = 0;
         foreach (StatementNode child in _program.GetChildren())
         {
+            Debug.Log($"interpreting statement {i}");
+            i += 1;
             var statement = new StatementInterpreter(child);
             statement.Interpret();
         }

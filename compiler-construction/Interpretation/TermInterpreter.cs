@@ -11,10 +11,12 @@ public class TermInterpreter : Interpretable
     public TermInterpreter(TermNode term)
     {
         _term = term;
+        children = term.GetChildren();
     }
     
     public override void Interpret()
     {
+        Debug.Log("Started to interpret term");
         List<TreeNode> operands = _term.GetChildren();
         List<UnaryInterpreter> unaryInterpreters = new List<UnaryInterpreter>(); 
         List<Token> operators = _term.GetOperators();
@@ -22,9 +24,8 @@ public class TermInterpreter : Interpretable
         {
             UnaryInterpreter unaryInterpreter = new UnaryInterpreter(node);
             unaryInterpreter.Interpret();
+            
             unaryInterpreters.Add(unaryInterpreter);
-            
-            
             if (unaryInterpreter.GetWhatExpression() != WhatExpression.RealExpr &&
                 unaryInterpreter.GetWhatExpression() != WhatExpression.IntegerExpr &&
                 unaryInterpreter.GetWhatExpression() != WhatExpression.BoolExpr &&
@@ -38,6 +39,7 @@ public class TermInterpreter : Interpretable
         {
             InheritValues(unaryInterpreters.First(), "Interpretation: error interpreting term while inheriting from a single unary");
         }
+        
         else
         {
             bool hasReal = false, hasBool = false, hasInt = false;

@@ -8,8 +8,8 @@ namespace compiler_construction.Syntax;
 public class FactorNode : ConstReduceableNode
 {
     private bool calledByForHeader;
-    private List<Token> operators = [];
-    private List<ConstReduceableNode> operands = [];
+    private List<Token> operators = new List<Token>();
+    private List<ConstReduceableNode> operands = new List<ConstReduceableNode>();
 
     public List<Token> GetOperators()
     {

@@ -2,21 +2,23 @@ using compiler_construction.Syntax;
 
 namespace compiler_construction.Interpretation;
 
-public class StatementInterpreter
+public class StatementInterpreter : Interpretable
 {
     private StatementNode _statement;
     
     public StatementInterpreter(StatementNode statement)
     {
         _statement = statement;
+        children = statement.GetChildren();
     }
-    public void Interpret()
+    public override void Interpret()
     {
         foreach (var child in _statement.GetChildren())
         {
             switch (child)
             {
                 case(DeclarationNode declarationNode):
+                    Debug.Log("Im interpreting declaration:");
                     var declaration = new DeclarationInterpreter(declarationNode);
                     declaration.Interpret();
                     Debug.Log("The result of the new declaration:");
@@ -26,9 +28,11 @@ public class StatementInterpreter
                     }
                     break;
                 case(AssignmentNode assignmentNode):
+                    Debug.Log("Im interpreting assignment:");
                     var assignment = new AssignmentInterpreter(assignmentNode);
                     assignment.Interpret();
-                    // TODO: all assignments apart from simple idents
+                    // TODO: assignment for call
+                    Debug.Log("I have finished interpreting assignment");
                     break;
                 case(IfNode ifNode):
                     break;
@@ -43,7 +47,10 @@ public class StatementInterpreter
                 case(ExitNode exitNode):
                     break;
                 case(PrintNode printNode):
-                    
+                    Debug.Log("Im interpreting print");
+                    var print = new PrintInterpreter(printNode);
+                    print.Interpret();
+                    Debug.Log("I have finished interpreting print");
                     break;
                 default:
                     throw new InterpretationException("Interpreter: no valid statement detected");

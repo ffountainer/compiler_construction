@@ -1,3 +1,4 @@
+using compiler_construction.Interpretation;
 using compiler_construction.Semantics;
 using compiler_construction.Syntax.Literals;
 using compiler_construction.Tokenization;
@@ -13,6 +14,13 @@ public abstract class ConstReduceableNode : TreeNode
     protected bool BoolValue;
     protected double RealValue;
     protected int IntValue;
+    protected string StringValue;
+    protected List<TupleElementNode> TupleValue = new List<TupleElementNode>();
+    protected List<ExpressionNode> ArrayValue =  new List<ExpressionNode>();
+    protected List<String> Arguments =  new List<String>();
+    protected WhatFunction WhatFunc;
+    protected List<StatementNode> Body = new List<StatementNode>();
+    protected ExpressionNode shortFuncExpr;
 
     public bool IsConst;
 

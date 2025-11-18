@@ -1,5 +1,6 @@
 using compiler_construction.Interpretation;
 using compiler_construction.Semantics;
+using compiler_construction.Syntax.Literals;
 using compiler_construction.Tokenization;
 using compiler_construction.Tokenization.Keywords;
 
@@ -29,6 +30,20 @@ public class ExpressionNode : ConstReduceableNode
     public ExpressionNode(bool calledByForHeader = false)
     {
         this.calledByForHeader = calledByForHeader;
+    }
+
+    public ExpressionNode(List<ExpressionNode> array, List<TreeNode> ch)
+    {
+        WhatExpression = WhatExpression.ArrayExpr;
+        ArrayValue = array;
+        children = ch;
+    }
+
+    public ExpressionNode(List<TupleElementNode> tuple, List<TreeNode> ch)
+    {
+        WhatExpression = WhatExpression.TupleExpr;
+        TupleValue = tuple;
+        children = ch;
     }
     
     public override string GetName()

@@ -31,7 +31,7 @@ public class TupleNode : TreeNode
             var tupleElement = NodeFactory.ConstructNode(new TupleElementNode(), lexer, token, out opToken);
             foreach (TupleElementNode element in Elements)
             {
-                if (element.key != null && element.key.GetValue() == tupleElement.key.GetValue())
+                if (element.key != null && tupleElement.key != null && element.key.GetValue() == tupleElement.key.GetValue())
                 {
                     throw new SemanticException($"Tuple element with key \"{element.key.GetValue()}\" already exists");
                 }

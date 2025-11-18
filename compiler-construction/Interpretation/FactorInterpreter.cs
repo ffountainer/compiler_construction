@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using compiler_construction.Syntax;
 using compiler_construction.Syntax.Literals;
 using compiler_construction.Tokenization;
@@ -11,10 +12,14 @@ public class FactorInterpreter : Interpretable
 
     public FactorInterpreter(FactorNode factor)
     {
+        Debug.Log($"Factor is not null: {factor != null}");
+        Debug.Log("there are " + factor.GetChildren().Count + " children for the factor");
         _factor = factor;
+        children = factor.GetChildren();
     }
     public override void Interpret()
     {
+        Debug.Log("Started to interpret factor");
         List<TreeNode> operands = _factor.GetChildren();
         List<TermInterpreter> termInterpreters = new List<TermInterpreter>(); 
         List<Token> operators = _factor.GetOperators();
@@ -66,6 +71,7 @@ public class FactorInterpreter : Interpretable
 
         if (termInterpreters.Count == 1)
         {
+            Debug.Log("Factor consists of only one term");
             InheritValues(termInterpreters.First(), "Interpretation: cannot interpret factor while inheriting from a single term");
         }
         else

@@ -10,13 +10,19 @@ public abstract class Interpretable
     protected double RealValue;
     protected int IntValue;
     protected string StringValue;
-    protected List<ExpressionNode> ArrayValue;
-    protected List<TupleElementNode> TupleValue;
-    protected List<String> Arguments;
+    protected List<ExpressionNode> ArrayValue = new List<ExpressionNode>();
+    protected List<TupleElementNode> TupleValue = new List<TupleElementNode>();
+    protected List<String> Arguments = new List<string>();
     protected WhatFunction WhatFunc;
-    protected List<StatementNode> Body;
+    protected List<StatementNode> Body = new List<StatementNode>();
     protected ExpressionNode shortFuncExpr;
     protected ExpressionNode bracedExpr;
+    protected List<TreeNode> children = new List<TreeNode>();
+    
+    public List<TreeNode> GetChildren()
+    {
+        return children;
+    }
 
     public void InheritValues(Interpretable interpreter, string exception)
     {
@@ -67,13 +73,18 @@ public abstract class Interpretable
         }
     }
         
-    public ExpressionNode GetTupleElementByKey(IdentifierNode findKey)
+    public ExpressionNode GetTupleElementByKey(List<TupleElementNode> tupleValue, IdentifierNode findKey)
     {
-        foreach (var item in TupleValue)
+        Debug.Log($"The size of search tuple is {tupleValue.Count}");
+        foreach (var item in tupleValue)
         {
-            if (item.key != null && item.key.GetValue().Equals(findKey.GetValue()))
+            if (item.key != null)
             {
-               return item.value; 
+                Debug.Log($"trying to find key {findKey.GetValue()}, checking against {item.key.GetValue()}");
+                if (item.key.GetValue().Equals(findKey.GetValue()))
+                {
+                    return item.value; 
+                }
             }
         }
         throw new InterpretationException($"Interpretation: No element found with the given key {findKey.GetValue()}");
@@ -89,9 +100,9 @@ public abstract class Interpretable
         return WhatExpr ==  WhatExpression.RealExpr ? RealValue : IntValue;
     }
     
-    public ExpressionNode GetTupleElementByIndex(int index)
+    public ExpressionNode GetTupleElementByIndex(List<TupleElementNode> tupleValue, int index)
     {
-        return TupleValue[index].value;
+        return tupleValue[index].value;
     }
     
     public ExpressionNode GetShortFuncExpr()

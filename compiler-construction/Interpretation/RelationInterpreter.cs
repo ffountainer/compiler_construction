@@ -12,23 +12,31 @@ public class RelationInterpreter : Interpretable
     public RelationInterpreter(RelationNode relation)
     {
         _relation = relation;
+        children = relation.GetChildren();
     }
 
     public override void Interpret()
     {
-        TermNode lhs = (TermNode)_relation.GetLHS;
-        TermNode rhs = (TermNode)_relation.GetRHS;
-        Token op = _relation.GetTheOperator;
-
-        TermInterpreter lhsInterpreter = new TermInterpreter(lhs);
+        FactorNode lhs = (FactorNode)_relation.GetChildren().First();
+        FactorNode rhs = null;
+        if (_relation.GetChildren().Count() > 1)
+        {
+            rhs = (FactorNode) _relation.GetChildren().Skip(1).First();
+        }
+        
+        FactorInterpreter lhsInterpreter = new FactorInterpreter(lhs);
+        
         lhsInterpreter.Interpret();
         if (rhs is null)
         {
+            Debug.Log("RHS is null");
             InheritValues(lhsInterpreter, "Interpreter: error interpreting relation while inheriting from term");
         }
         else
         {
-            TermInterpreter rhsInterpreter = new TermInterpreter(rhs);
+            Token op = _relation.GetTheOperator();
+            Debug.Log("RHS is not null");
+            FactorInterpreter rhsInterpreter = new FactorInterpreter(rhs);
             WhatExpr = WhatExpression.BoolExpr;
             
             if (op is Equal || op is NotEqual)
