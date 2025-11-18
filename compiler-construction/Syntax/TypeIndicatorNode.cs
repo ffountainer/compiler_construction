@@ -15,6 +15,11 @@ public class TypeIndicatorNode : TreeNode
         return $"TypeIndicator: {name}";
     }
 
+    public string GetType()
+    {
+        return name;
+    }
+
     public override void ReadTokens(out Token lastToken)
     {
         if (firstToken is IntKeyword)

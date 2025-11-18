@@ -9,6 +9,8 @@ public class UnaryInterpreter : Interpretable
 {
     private UnaryNode _unary;
 
+    public bool isTypeCheck = false;
+
     public UnaryInterpreter(UnaryNode node)
     {
         _unary = node;
@@ -21,18 +23,19 @@ public class UnaryInterpreter : Interpretable
         // case Reference
         if (_unary.GetChildren().Count == 1 && _unary.GetChildren().First() is ReferenceNode reference)
         {
-            ReferenceInterpreter referenceInterpreter = new ReferenceInterpreter(reference);
+            ReferenceInterpreter referenceInterpreter = new ReferenceInterpreter(reference, isTypeCheck);
             referenceInterpreter.Interpret();
             InheritValues(referenceInterpreter, $"Interpretation: error to interpret unary from {reference.GetIdentifier().GetValue()}");
         }
         // case Reference is TypeIndicator
         else if (_unary.GetChildren().First() is ReferenceNode referenceNode)
         {
+            isTypeCheck = true;
             WhatExpr = WhatExpression.BoolExpr;
-            ReferenceInterpreter referenceNodeInterpreter = new ReferenceInterpreter(referenceNode);
+            ReferenceInterpreter referenceNodeInterpreter = new ReferenceInterpreter(referenceNode, isTypeCheck);
             referenceNodeInterpreter.Interpret();
             TypeIndicatorNode type = (TypeIndicatorNode)_unary.GetChildren().Skip(1).First();
-            string typeName = type.GetName();
+            string typeName = type.GetType();
             WhatExpression referenceType = referenceNodeInterpreter.GetWhatExpression();
             if ((referenceType is WhatExpression.IntegerExpr && typeName.Equals("int"))
                 || (referenceType is WhatExpression.StringExpr && typeName.Equals("string"))

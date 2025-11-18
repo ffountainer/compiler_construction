@@ -68,7 +68,7 @@ public class FactorInterpreter : Interpretable
                 throw new InterpretationException("Interpretation: conflicting values, cannot apply factor operators");
             }
         }
-
+        
         if (termInterpreters.Count == 1)
         {
             Debug.Log("Factor consists of only one term");
@@ -79,6 +79,7 @@ public class FactorInterpreter : Interpretable
             // case if we are concatenating strings
             if (allStrings)
             {
+                WhatExpr = WhatExpression.StringExpr;
                 string concatenatedString = "";
                 foreach (Token token in operators)
                 {
@@ -98,6 +99,7 @@ public class FactorInterpreter : Interpretable
             }
             else if (allArrays)
             {
+                WhatExpr = WhatExpression.ArrayExpr;
                 List<ExpressionNode> concatenatedArray = new List<ExpressionNode>();
                 foreach (Token token in operators)
                 {
@@ -114,9 +116,30 @@ public class FactorInterpreter : Interpretable
                 }
 
                 ArrayValue = concatenatedArray;
+                
+                List<TreeNode> newChildren = new List<TreeNode>();
+                
+                TreeNode node = new ArrayNode();
+                
+                foreach (ExpressionNode element in concatenatedArray)
+                {
+                    node.AddChild(element);
+                }
+                node = new LiteralNode().AddChild(node);
+                node = new PrimaryNode().AddChild(node);
+                node = new UnaryNode().AddChild(node);
+                node = new TermNode().AddChild(node);
+                node = new FactorNode().AddChild(node);
+                node = new RelationNode().AddChild(node);
+                
+                newChildren.Add(node);
+                
+                children = newChildren;
+                
             }
             else if (allTuples)
             {
+                WhatExpr = WhatExpression.TupleExpr;
                 List<TupleElementNode> concatenatedTuple = new List<TupleElementNode>();
                 foreach (Token token in operators)
                 {
@@ -131,8 +154,24 @@ public class FactorInterpreter : Interpretable
                     List<TupleElementNode> newTuple = termInterpreter.GetTupleValue();
                     concatenatedTuple.AddRange(newTuple);
                 }
-
+                List<TreeNode> newChildren = new List<TreeNode>();
                 TupleValue = concatenatedTuple;
+                
+                TreeNode node = new TupleNode();
+                
+                foreach (TupleElementNode element in concatenatedTuple)
+                {
+                    node.AddChild(element);
+                }
+                node = new LiteralNode().AddChild(node);
+                node = new PrimaryNode().AddChild(node);
+                node = new UnaryNode().AddChild(node);
+                node = new TermNode().AddChild(node);
+                node = new FactorNode().AddChild(node);
+                node = new RelationNode().AddChild(node);
+                
+                newChildren.Add(node);
+                children = newChildren;
             }
             else if (allNumerical)
             {

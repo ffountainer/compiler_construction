@@ -17,6 +17,7 @@ public class RelationInterpreter : Interpretable
 
     public override void Interpret()
     {
+        Debug.Log("Starting to interpret relation");
         FactorNode lhs = (FactorNode)_relation.GetChildren().First();
         FactorNode rhs = null;
         if (_relation.GetChildren().Count() > 1)

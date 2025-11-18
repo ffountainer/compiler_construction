@@ -6,10 +6,13 @@ public class ReferenceInterpreter : Interpretable
 {
     private ReferenceNode _reference;
 
-    public ReferenceInterpreter(ReferenceNode reference)
+    public bool isTypeCheck = false;
+
+    public ReferenceInterpreter(ReferenceNode reference, bool isCheck)
     {
         _reference = reference;
         children = reference.GetChildren();
+        isTypeCheck = isCheck;
     }
     public override void Interpret()
     {
@@ -20,10 +23,15 @@ public class ReferenceInterpreter : Interpretable
             case(WhatReference.Ident):
                 Debug.Log("The reference is by ident");
                 ExpressionNode expr = Interpreter.GetIdentifiers()[referenceIdent];
-                if (expr == null)
+                if (expr == null && !isTypeCheck)
                 {
                     throw new InterpretationException(
                         $"Interpretation: cannot reference a null value from identifier {referenceIdent.GetValue()}");
+                }
+
+                if (expr == null && isTypeCheck)
+                {
+                    expr = ConstructNullExpr();
                 }
                 ExpressionInterpreter exprInterpreter = new ExpressionInterpreter(expr);
                 exprInterpreter.Interpret();

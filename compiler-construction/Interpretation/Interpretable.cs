@@ -73,7 +73,7 @@ public abstract class Interpretable
         }
     }
     
-    public  ExpressionNode ConstructNullExpr()
+    public  ExpressionNode ConstructNullExprArray()
     {
         TreeNode expr = new NoneLiteral();
         expr = new LiteralNode().AddChild(expr);
@@ -92,6 +92,20 @@ public abstract class Interpretable
         node = new FactorNode().AddChild(node);
         node = new RelationNode().AddChild(node);
 
+        ExpressionNode nullExpr = (ExpressionNode)new ExpressionNode().AddChild(node);
+        return nullExpr;
+    }
+    
+    public  ExpressionNode ConstructNullExpr()
+    {
+        TreeNode node = new NoneLiteral();
+        node = new LiteralNode().AddChild(node);
+        node = new PrimaryNode().AddChild(node);
+        node = new UnaryNode().AddChild(node);
+        node = new TermNode().AddChild(node);
+        node = new FactorNode().AddChild(node);
+        node = new RelationNode().AddChild(node);
+        
         ExpressionNode nullExpr = (ExpressionNode)new ExpressionNode().AddChild(node);
         return nullExpr;
     }
