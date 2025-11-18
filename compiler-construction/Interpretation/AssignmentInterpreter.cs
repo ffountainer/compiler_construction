@@ -166,9 +166,13 @@ public class AssignmentInterpreter : Interpretable
 
             int index = arrayIndexInterpreter.GetIntValue() - 1;
             
-            if (initialArray.Count < index)
+            if (initialArray.Count <= index)
             {
-                throw new InterpretationException("Interpreter: invalid array index");
+                int initialCount = initialArray.Count;
+                for (int i = 0; i < (index - initialCount + 1); i++)
+                {
+                    initialArray.Add(ConstructNullExpr());
+                }
             }
 
             for (int i = 0; i < initialArray.Count; i++)

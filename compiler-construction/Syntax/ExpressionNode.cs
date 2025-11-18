@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using compiler_construction.Interpretation;
 using compiler_construction.Semantics;
 using compiler_construction.Syntax.Literals;
@@ -31,7 +32,6 @@ public class ExpressionNode : ConstReduceableNode
     {
         this.calledByForHeader = calledByForHeader;
     }
-
     public ExpressionNode(List<ExpressionNode> array, List<TreeNode> ch)
     {
         WhatExpression = WhatExpression.ArrayExpr;
