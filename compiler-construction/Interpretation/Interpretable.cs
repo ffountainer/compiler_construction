@@ -18,7 +18,7 @@ public abstract class Interpretable
     protected ExpressionNode shortFuncExpr;
     protected ExpressionNode bracedExpr;
 
-    public void InheritValuesFromExpr(Interpretable interpreter, string exception)
+    public void InheritValues(Interpretable interpreter, string exception)
     {
         switch (interpreter.GetWhatExpression())
         {
@@ -77,6 +77,16 @@ public abstract class Interpretable
             }
         }
         throw new InterpretationException($"Interpretation: No element found with the given key {findKey.GetValue()}");
+    }
+    
+    public double GetNumericalValue()
+    {
+        if (WhatExpr != WhatExpression.RealExpr && WhatExpr != WhatExpression.IntegerExpr)
+        {
+            throw new InterpretationException("The factor does not have a numeric value");
+        }
+        
+        return WhatExpr ==  WhatExpression.RealExpr ? RealValue : IntValue;
     }
     
     public ExpressionNode GetTupleElementByIndex(int index)

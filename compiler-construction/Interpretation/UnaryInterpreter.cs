@@ -21,7 +21,7 @@ public class UnaryInterpreter : Interpretable
         {
             ReferenceInterpreter referenceInterpreter = new ReferenceInterpreter(reference);
             referenceInterpreter.Interpret();
-            InheritValuesFromExpr(referenceInterpreter, $"Interpretation: error to interpret unary from {reference.GetIdentifier().GetValue()}");
+            InheritValues(referenceInterpreter, $"Interpretation: error to interpret unary from {reference.GetIdentifier().GetValue()}");
         }
         // case Reference is TypeIndicator
         else if (_unary.GetChildren().First() is ReferenceNode referenceNode)
@@ -54,7 +54,7 @@ public class UnaryInterpreter : Interpretable
             PrimaryNode primary = (PrimaryNode)_unary.GetChildren().First();
             PrimaryInterpreter primaryInterpreter = new PrimaryInterpreter(primary);
             primaryInterpreter.Interpret();
-            InheritValuesFromExpr(primaryInterpreter, "Interpretation: error to interpret unary while interpreting primary");
+            InheritValues(primaryInterpreter, "Interpretation: error interpreting unary while inheriting from primary");
             
             Token? primaryOperator = _unary.GetPrimaryOperator();
             

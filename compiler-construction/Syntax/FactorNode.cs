@@ -11,6 +11,11 @@ public class FactorNode : ConstReduceableNode
     private List<Token> operators = [];
     private List<ConstReduceableNode> operands = [];
 
+    public List<Token> GetOperators()
+    {
+        return operators;
+    }
+
     public FactorNode(bool calledByForHeader = false)
     {
         this.calledByForHeader = calledByForHeader;

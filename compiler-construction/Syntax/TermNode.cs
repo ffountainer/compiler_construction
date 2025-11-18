@@ -12,6 +12,16 @@ public class TermNode : ConstReduceableNode
     private List<Token> operators = [];
     private List<ConstReduceableNode> operands = [];
 
+    public List<ConstReduceableNode> GetOperands()
+    {
+        return operands;
+    }
+
+    public List<Token> GetOperators()
+    {
+        return operators;
+    }
+
     public TermNode(bool calledByForHeader = false)
     {
         this.calledByForHeader = calledByForHeader;

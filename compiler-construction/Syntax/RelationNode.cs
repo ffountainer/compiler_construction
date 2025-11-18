@@ -11,6 +11,11 @@ public class RelationNode : ConstReduceableNode
     private ConstReduceableNode lhs;
     private Token? theOperator;
     private ConstReduceableNode? rhs;
+    
+    public ConstReduceableNode GetLHS => lhs;
+    public ConstReduceableNode? GetRHS => rhs;
+    
+    public Token? GetTheOperator => theOperator;
 
     public RelationNode(bool calledByForHeader = false)
     {

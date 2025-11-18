@@ -36,7 +36,6 @@ public class AssignmentInterpreter
             if (tupleElement.GetWhatTupleReference() is WhatTupleReference.TupleByIdent)
             {
                 IdentifierNode tupleElementName = (IdentifierNode)tupleElement.GetChildren().First();
-                Console.WriteLine(Interpreter.GetIdentifiers()[tupleName].GetOperands());
             }
         }
         
