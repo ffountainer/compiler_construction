@@ -18,6 +18,9 @@ public class AssignmentInterpreter : Interpretable
         ReferenceNode reference = (ReferenceNode)_assignment.GetChildren().First();
         ExpressionNode expression = (ExpressionNode)_assignment.GetChildren().Last();
         Debug.Log($"Im interpreting assignment for reference {reference.GetIdentifier().GetValue()}");
+        ExpressionInterpreter expressionInterpreter = new ExpressionInterpreter(expression);
+        expressionInterpreter.Interpret();
+        ExpressionNode calculatedExpression = ConstructExpressionFromExprInterpreter(expressionInterpreter);
         if (reference.getWhatReference() is WhatReference.Ident)
         {
             Debug.Log("The reference is by ident");
@@ -25,9 +28,6 @@ public class AssignmentInterpreter : Interpretable
             {
                 throw new InterpretationException($"Interpreter: no identifier {reference.GetIdentifier().GetValue()} is found");
             }
-            ExpressionInterpreter expressionInterpreter = new ExpressionInterpreter(expression);
-            expressionInterpreter.Interpret();
-            ExpressionNode calculatedExpression = ConstructExpressionFromExprInterpreter(expressionInterpreter);
             Interpreter.SetIdentifier(reference.GetIdentifier(), calculatedExpression);
         }
         // example:
@@ -69,7 +69,7 @@ public class AssignmentInterpreter : Interpretable
                     if (element.key != null && element.key.GetValue() == tupleElementName.GetValue())
                     {
                         found = true;
-                        newTuple.Add(new TupleElementNode(element.key, expression, element.GetChildren()));
+                        newTuple.Add(new TupleElementNode(element.key, calculatedExpression, element.GetChildren()));
                     }
                     else
                     {
@@ -113,7 +113,7 @@ public class AssignmentInterpreter : Interpretable
                 {
                     if (i == index)
                     {
-                        newTuple.Add(new TupleElementNode(initialTuple[i].key, expression, initialTuple.ElementAt(i).GetChildren()));
+                        newTuple.Add(new TupleElementNode(initialTuple[i].key, calculatedExpression, initialTuple.ElementAt(i).GetChildren()));
                     }
                     else
                     {
@@ -182,7 +182,7 @@ public class AssignmentInterpreter : Interpretable
             {
                 if (i == index)
                 {
-                    newArray.Add(expression);
+                    newArray.Add(calculatedExpression);
                 }
                 else
                 {
