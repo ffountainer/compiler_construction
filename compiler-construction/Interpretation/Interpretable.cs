@@ -12,7 +12,7 @@ public abstract class Interpretable
     protected string StringValue;
     protected List<ExpressionNode> ArrayValue = new List<ExpressionNode>();
     protected List<TupleElementNode> TupleValue = new List<TupleElementNode>();
-    protected List<String> Arguments = new List<string>();
+    protected List<IdentifierNode> Arguments = new List<IdentifierNode>();
     protected WhatFunction WhatFunc;
     protected List<StatementNode> Body = new List<StatementNode>();
     protected ExpressionNode shortFuncExpr;
@@ -310,7 +310,7 @@ public abstract class Interpretable
         return Body;
     }
     
-    public List<String> GetArguments()
+    public List<IdentifierNode> GetArguments()
     {
         return Arguments;
     }

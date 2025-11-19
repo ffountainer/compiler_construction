@@ -17,12 +17,12 @@ public class FunctionLiteralNode : TreeNode
         return "FunctionLiteral";
     }
     
-    private List<String> arguments;
+    private List<IdentifierNode> arguments = new List<IdentifierNode>();
     private WhatFunction WhatFunc;
-    private List<StatementNode> Body;
+    private List<StatementNode> Body =  new List<StatementNode>();
     private ExpressionNode shortFuncExpr;
 
-    public FunctionLiteralNode WithValues(List<String> args, WhatFunction whatFunc, List<StatementNode> body,
+    public FunctionLiteralNode WithValues(List<IdentifierNode> args, WhatFunction whatFunc, List<StatementNode> body,
         ExpressionNode shortFuncEx)
     {
         arguments = args;
@@ -42,7 +42,7 @@ public class FunctionLiteralNode : TreeNode
         return Body;
     }
     
-    public List<String> GetArguments()
+    public List<IdentifierNode> GetArguments()
     {
         return arguments;
     }
@@ -66,7 +66,7 @@ public class FunctionLiteralNode : TreeNode
                 SyntaxAnalyzer.AddToCurScope(token.GetSourceText(), true);
                 var node = NodeFactory.ConstructNode(new IdentifierNode(), lexer, token);
                 children.Add(node);
-                arguments.Add(node.GetValue());
+                arguments.Add(node);
                 token = lexer.GetNextToken();
             } while (token is Comma);
 

@@ -32,7 +32,6 @@ public class StatementInterpreter : Interpretable
                     Debug.Log("Im interpreting assignment:");
                     var assignment = new AssignmentInterpreter(assignmentNode);
                     assignment.Interpret();
-                    // TODO: assignment for call
                     InheritValues(assignment, "Interpreter: error inheriting from the assignment while interpreting statement");
                     Debug.Log("I have finished interpreting assignment");
                     break;
@@ -54,6 +53,9 @@ public class StatementInterpreter : Interpretable
                     forLoop.Interpret();
                     break;
                 case (LoopBodyNode loopBodyNode):
+                    Debug.Log("Im interpreting loop body:");
+                    var body = new BodyInterpreter((BodyNode)loopBodyNode.GetChildren().First());
+                    body.Interpret();
                     break;
                 case(ReturnNode returnNode):
                     break;

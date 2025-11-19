@@ -209,10 +209,5 @@ public class AssignmentInterpreter : Interpretable
             
             SetIdentifier(reference.GetIdentifier(), (new ExpressionNode(newArray,  newChildren)));
         }
-        else if (reference.getWhatReference() is WhatReference.Call)
-        {
-            // TODO
-        }
-        // DO NOT INTERPRET REFERENCE IF YOU ARE HERE
     }
 }

@@ -96,7 +96,20 @@ public class ReferenceInterpreter : Interpretable
                 }
                 break;
             case(WhatReference.Call):
-                // TODO
+                ExpressionNode referencedFunction = FindExpression(referenceIdent);
+                if (referencedFunction == null)
+                {
+                    throw new InterpretationException(
+                        $"Interpretation: cannot reference a null value from identifier {referenceIdent.GetValue()}");
+                }
+                ExpressionInterpreter functionLiteralInterpreter = new ExpressionInterpreter(referencedFunction);
+                functionLiteralInterpreter.Interpret();
+
+                List<TreeNode> arguments = _reference.GetChildren().Skip(1).First().GetChildren().ToList();
+                FunctionInterpreter functionInterpreter = new FunctionInterpreter(functionLiteralInterpreter.GetBody(), 
+                    functionLiteralInterpreter.GetArguments(), functionLiteralInterpreter.GetWhatFunc(), 
+                    functionLiteralInterpreter.GetShortFuncExpr(), arguments);
+                functionInterpreter.Interpret();
                 break;
             default:
                 throw new InterpretationException($"Interpretation: error trying to interpret a reference {referenceIdent.GetValue()}");

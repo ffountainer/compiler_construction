@@ -11,14 +11,13 @@ class Program
     
     private static void Main(string[] args)
     {
-        string path = "../../../tests/interpretation/test8.d";
+        string path = "../../../tests/interpretation/test10.d";
         // string path = "../../../tests/semantics/optimisations/unreachable/test1.d";
         Debug.Log("Hello World!");
 
         // LexerShowcase(path);
         // SyntaxAnalyzerShowcase(path);
         InterpreterShowcase(path);
-        
     }
 
     private static void LexerShowcase(string path)
