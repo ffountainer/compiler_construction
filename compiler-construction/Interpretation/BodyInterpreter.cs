@@ -18,6 +18,11 @@ public class BodyInterpreter : Interpretable
         {
             var statement = new StatementInterpreter(child);
             statement.Interpret();
+            if (exitStatement)
+            {
+                break;
+            }
+            
             InheritValues(statement, "Interpreter: error inheriting statement values while interpreting body");
         }
     }

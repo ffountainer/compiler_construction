@@ -110,6 +110,7 @@ public class ReferenceInterpreter : Interpretable
                     functionLiteralInterpreter.GetArguments(), functionLiteralInterpreter.GetWhatFunc(), 
                     functionLiteralInterpreter.GetShortFuncExpr(), arguments);
                 functionInterpreter.Interpret();
+                InheritValues(functionInterpreter, "Interpretation: error while inheriting function call result");
                 break;
             default:
                 throw new InterpretationException($"Interpretation: error trying to interpret a reference {referenceIdent.GetValue()}");

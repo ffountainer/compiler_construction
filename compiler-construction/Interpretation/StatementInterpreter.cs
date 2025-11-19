@@ -58,6 +58,8 @@ public class StatementInterpreter : Interpretable
                     body.Interpret();
                     break;
                 case(ReturnNode returnNode):
+                    returnStatement = true;
+                    returnValue = (ExpressionNode)returnNode.GetChildren().First();
                     break;
                 case(ExitNode exitNode):
                     exitStatement = true;

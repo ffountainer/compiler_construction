@@ -19,6 +19,18 @@ public abstract class Interpretable
     protected ExpressionNode bracedExpr;
     protected List<TreeNode> children = new List<TreeNode>();
     protected static bool isAssignment = false;
+    protected static ExpressionNode returnValue;
+    protected static bool returnStatement = false;
+
+    public bool GetReturnStatement()
+    {
+        return returnStatement;
+    }
+
+    public ExpressionNode GetReturnValue()
+    {
+        return returnValue;
+    }
 
     protected static InterpretationScope currentScope;
     protected static InterpretationScope parentScope;

@@ -109,7 +109,7 @@ public class ForLoopInterpreter : Interpretable
                     SetIdentifier(forHeaderIdentifier, value);
                 }
             }
-            
+            exitStatement = false;
             returnPrevScope();
         }
         else

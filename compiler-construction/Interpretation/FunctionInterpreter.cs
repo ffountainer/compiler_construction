@@ -35,6 +35,13 @@ public class FunctionInterpreter : Interpretable
             {
                 StatementInterpreter statementInterpreter = new StatementInterpreter(statement);
                 statementInterpreter.Interpret();
+                if (statement.GetChildren().Count > 0 && statement.GetChildren().First() is ReturnNode)
+                {
+                    ExpressionInterpreter returnInterpreter = new ExpressionInterpreter(returnValue);
+                    returnInterpreter.Interpret();
+                    InheritValues(returnInterpreter, "Error inheriting from function result");
+                    break;
+                }
             }
         }
         else
@@ -43,6 +50,9 @@ public class FunctionInterpreter : Interpretable
             expressionInterpreter.Interpret();
             InheritValues(expressionInterpreter, "Error inheriting from function result");
         }
+
+        returnValue = null;
+        returnStatement = false;
         returnPrevScope();
     }
 }
