@@ -7,7 +7,7 @@ namespace compiler_construction.Syntax.Literals;
 
 public class TupleNode : TreeNode
 {
-    public List<TupleElementNode> Elements { get; } = new();
+    public List<TupleElementNode> Elements = new List<TupleElementNode>();
     public override string GetName()
     {
         return "Tuple";
@@ -55,5 +55,11 @@ public class TupleNode : TreeNode
         }
 
         lastToken = opToken;
+    }
+    
+    public TupleNode WithValue(List<TupleElementNode> value)
+    {
+        Elements = value;
+        return this;
     }
 }

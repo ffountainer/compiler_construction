@@ -18,6 +18,9 @@ public abstract class Interpretable
     protected ExpressionNode shortFuncExpr;
     protected ExpressionNode bracedExpr;
     protected List<TreeNode> children = new List<TreeNode>();
+    protected static bool isAssignment = false;
+    
+    public bool GetIsAssignment() => isAssignment;
     
     public List<TreeNode> GetChildren()
     {
@@ -108,6 +111,56 @@ public abstract class Interpretable
         
         ExpressionNode nullExpr = (ExpressionNode)new ExpressionNode().AddChild(node);
         return nullExpr;
+    }
+    
+    public  ExpressionNode ConstructExpressionFromExprInterpreter(ExpressionInterpreter expressionInterpreter)
+    {
+        TreeNode expr = null;
+
+        switch (expressionInterpreter.GetWhatExpression())
+        {
+            case (WhatExpression.IntegerExpr):
+                expr = new IntegerLiteral().WithValue(expressionInterpreter.GetIntValue());
+                break;
+            case (WhatExpression.RealExpr):
+                expr = new RealLiteral().WithValue(expressionInterpreter.GetRealValue());
+                break;
+            case (WhatExpression.StringExpr):
+                expr = new StringLiteral().WithValue(expressionInterpreter.GetStringValue());
+                break;
+            case (WhatExpression.BoolExpr):
+                expr = new BooleanLiteral().WithValue(expressionInterpreter.GetBoolValue());
+                break;
+            case (WhatExpression.NoneExpr):
+                expr = new NoneLiteral();
+                break;
+            case (WhatExpression.ArrayExpr):
+                expr = new ArrayNode().WithValue(expressionInterpreter.GetArrayValue());
+                break;
+            case (WhatExpression.TupleExpr):
+                expr = new TupleNode().WithValue(expressionInterpreter.GetTupleValue());
+                break;
+            case (WhatExpression.FuncLiteralExpr):
+                expr = new FunctionLiteralNode().WithValues(expressionInterpreter.GetArguments(),
+                    expressionInterpreter.GetWhatFunc(), expressionInterpreter.GetBody(), expressionInterpreter.GetShortFuncExpr());
+                break;
+            default:
+                break;
+        }
+
+        if (!(expr is FunctionLiteralNode))
+        {
+            expr = new LiteralNode().AddChild(expr);
+        }
+        
+        expr = new PrimaryNode().AddChild(expr);
+        expr = new UnaryNode().AddChild(expr);
+        expr = new TermNode().AddChild(expr);
+        expr = new FactorNode().AddChild(expr);
+        expr = new RelationNode().AddChild(expr);
+        
+        ExpressionNode final = (ExpressionNode)new ExpressionNode().AddChild(expr);
+        return final;
     }
         
     public ExpressionNode GetTupleElementByKey(List<TupleElementNode> tupleValue, IdentifierNode findKey)

@@ -19,6 +19,11 @@ public abstract class TreeNode
     protected static bool IsWhileLoop = false;
     protected static String currentIdent = "";
 
+    public void SetChildren(List<TreeNode> ch)
+    {
+        children = ch;
+    }
+
     public virtual void Init(Lexer lexer, Token firstToken)
     {
         this.lexer = lexer;

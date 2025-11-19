@@ -6,7 +6,7 @@ namespace compiler_construction.Syntax.Literals;
 
 public class ArrayNode : TreeNode
 {
-    
+    public List<ExpressionNode> Value = new List<ExpressionNode>();
     public override string GetName()
     {
         return "Array";
@@ -25,8 +25,9 @@ public class ArrayNode : TreeNode
         
         while (true)
         {
-            children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out token));
-
+            var node = NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out token);
+            children.Add(node);
+            Value.Add(node);
             if (token is Comma)
             {
                 token = lexer.GetNextToken();
@@ -42,5 +43,11 @@ public class ArrayNode : TreeNode
             // Else
             throw new UnexpectedTokenException($"Expected comma or closing ] as part of array definition, got {token}");
         }
+    }
+    
+    public ArrayNode WithValue(List<ExpressionNode> value)
+    {
+        Value = value;
+        return this;
     }
 }

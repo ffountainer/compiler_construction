@@ -6,7 +6,12 @@ namespace compiler_construction.Syntax.Literals;
 public class IntegerLiteral : TreeNode
 {
     public int Value;
-    
+
+    public int GetValue()
+    {
+        return Value;
+    }
+
     public override string GetName()
     {
         return "INTEGER" + " " + Value;

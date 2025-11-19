@@ -26,20 +26,27 @@ public class StatementInterpreter : Interpretable
                     {
                         Debug.Log($">> {name.GetValue()} + {name}");
                     }
+                    InheritValues(declaration, "Interpreter: error inheriting from the declaration while interpreting statement");
                     break;
                 case(AssignmentNode assignmentNode):
                     Debug.Log("Im interpreting assignment:");
                     var assignment = new AssignmentInterpreter(assignmentNode);
                     assignment.Interpret();
                     // TODO: assignment for call
+                    InheritValues(assignment, "Interpreter: error inheriting from the assignment while interpreting statement");
                     Debug.Log("I have finished interpreting assignment");
                     break;
                 case(IfNode ifNode):
                     Debug.Log("Im interpreting if statement:");
                     var ifStatement = new IfStatementInterpreter(ifNode);
                     ifStatement.Interpret();
+                    InheritValues(ifStatement, "Interpreter: error inheriting from the ifStatement while interpreting statement");
                     break;
                 case(WhileLoopNode WhileLoopNode):
+                    Debug.Log("Im interpreting while loop:");
+                    var whileLoop = new WhileLoopInterpreter(WhileLoopNode);
+                    whileLoop.Interpret();
+                    InheritValues(whileLoop, "Interpreter: error inheriting from the while loop while interpreting statement");
                     break;
                 case(ForLoopNode ForLoopNode):
                     break;

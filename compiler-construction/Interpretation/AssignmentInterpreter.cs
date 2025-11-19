@@ -25,7 +25,10 @@ public class AssignmentInterpreter : Interpretable
             {
                 throw new InterpretationException($"Interpreter: no identifier {reference.GetIdentifier().GetValue()} is found");
             }
-            Interpreter.SetIdentifier(reference.GetIdentifier(), expression);
+            ExpressionInterpreter expressionInterpreter = new ExpressionInterpreter(expression);
+            expressionInterpreter.Interpret();
+            ExpressionNode calculatedExpression = ConstructExpressionFromExprInterpreter(expressionInterpreter);
+            Interpreter.SetIdentifier(reference.GetIdentifier(), calculatedExpression);
         }
         // example:
         // var tuple := {a := 3, b, 4}
@@ -209,6 +212,5 @@ public class AssignmentInterpreter : Interpretable
             // TODO
         }
         // DO NOT INTERPRET REFERENCE IF YOU ARE HERE
-        
     }
 }

@@ -22,6 +22,16 @@ public class FunctionLiteralNode : TreeNode
     private List<StatementNode> Body;
     private ExpressionNode shortFuncExpr;
 
+    public FunctionLiteralNode WithValues(List<String> args, WhatFunction whatFunc, List<StatementNode> body,
+        ExpressionNode shortFuncEx)
+    {
+        arguments = args;
+        WhatFunc = whatFunc;
+        Body = body;
+        shortFuncExpr = shortFuncEx;
+        return this;
+    }
+
     public ExpressionNode GetShortFuncExpr()
     {
         return shortFuncExpr;

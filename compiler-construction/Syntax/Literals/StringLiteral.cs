@@ -15,4 +15,10 @@ public class StringLiteral : TreeNode
         Value = firstToken.GetSourceText();
         lastToken = firstToken;
     }
+    
+    public StringLiteral WithValue(string value)
+    {
+        Value = value;
+        return this;
+    }
 }
