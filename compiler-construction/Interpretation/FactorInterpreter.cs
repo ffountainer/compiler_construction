@@ -13,7 +13,6 @@ public class FactorInterpreter : Interpretable
     public FactorInterpreter(FactorNode factor)
     {
         Debug.Log($"Factor is not null: {factor != null}");
-        Debug.Log("there are " + factor.GetChildren().Count + " children for the factor");
         _factor = factor;
         children = factor.GetChildren();
     }
@@ -68,9 +67,11 @@ public class FactorInterpreter : Interpretable
                 throw new InterpretationException("Interpretation: conflicting values, cannot apply factor operators");
             }
         }
-        
+        Debug.Log("there are " + _factor.GetChildren().Count + " children for the factor");
+        Debug.Log("there are " + termInterpreters.Count() + " term interpreters");
         if (termInterpreters.Count == 1)
         {
+            Debug.Log("TermInterpreter:" +  " " + termInterpreters.First().GetIntValue() + " " + termInterpreters.First().GetRealValue());
             Debug.Log("Factor consists of only one term");
             InheritValues(termInterpreters.First(), "Interpretation: cannot interpret factor while inheriting from a single term");
         }

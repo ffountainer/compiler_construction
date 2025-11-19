@@ -10,7 +10,7 @@ public class BodyNode : TreeNode
         return "Body";
     }
     
-    private List<StatementNode> Body;
+    private List<StatementNode> Body = new List<StatementNode>();
     
     public List<StatementNode> GetBody()
     {

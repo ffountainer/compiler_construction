@@ -31,13 +31,14 @@ public class RelationInterpreter : Interpretable
         if (rhs is null)
         {
             Debug.Log("RHS is null");
-            InheritValues(lhsInterpreter, "Interpreter: error interpreting relation while inheriting from term");
+            InheritValues(lhsInterpreter, "Interpreter: error interpreting relation while inheriting from factor");
         }
         else
         {
             Token op = _relation.GetTheOperator();
-            Debug.Log("RHS is not null");
+            Debug.Log("RHS is not null!");
             FactorInterpreter rhsInterpreter = new FactorInterpreter(rhs);
+            rhsInterpreter.Interpret();
             WhatExpr = WhatExpression.BoolExpr;
             
             if (op is Equal || op is NotEqual)
@@ -71,6 +72,7 @@ public class RelationInterpreter : Interpretable
             else if (op is Less) BoolValue = lhsValue < rhsValue;
             else if (op is LessEqual) BoolValue = lhsValue <= rhsValue;
             else if (op is GreaterEqual) BoolValue = lhsValue >= rhsValue;
+            
         }
     }
 }

@@ -35,6 +35,9 @@ public class StatementInterpreter : Interpretable
                     Debug.Log("I have finished interpreting assignment");
                     break;
                 case(IfNode ifNode):
+                    Debug.Log("Im interpreting if statement:");
+                    var ifStatement = new IfStatementInterpreter(ifNode);
+                    ifStatement.Interpret();
                     break;
                 case(WhileLoopNode WhileLoopNode):
                     break;

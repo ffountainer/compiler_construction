@@ -44,12 +44,24 @@ public class IfNode : TreeNode
         
         // Short if is handled like
         // if expression => expression
+        bool isShortEnd = false;
         if (isShort)
         {
-            children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out lastToken));
+            children.Add(NodeFactory.ConstructNode(new BodyNode(), lexer, token, out var isElse));
             
             CheckIfRedundant();
             
+            if (isElse is End)
+            {
+                isShortEnd = true;
+            }
+            
+        }
+
+        if (isShort && isShortEnd)
+        {
+            lastToken = lexer.GetNextToken();
+            CheckIfRedundant();
             return;
         }
         
