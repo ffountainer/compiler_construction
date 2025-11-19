@@ -22,7 +22,7 @@ public class StatementInterpreter : Interpretable
                     var declaration = new DeclarationInterpreter(declarationNode);
                     declaration.Interpret();
                     Debug.Log("The result of the new declaration:");
-                    foreach (IdentifierNode name in Interpreter.GetIdentifiers().Keys.ToList())
+                    foreach (IdentifierNode name in GetIdentifiers().Keys.ToList())
                     {
                         Debug.Log($">> {name.GetValue()} + {name}");
                     }
@@ -49,12 +49,16 @@ public class StatementInterpreter : Interpretable
                     InheritValues(whileLoop, "Interpreter: error inheriting from the while loop while interpreting statement");
                     break;
                 case(ForLoopNode ForLoopNode):
+                    Debug.Log("Im interpreting for loop:");
+                    var forLoop = new ForLoopInterpreter(ForLoopNode);
+                    forLoop.Interpret();
                     break;
                 case (LoopBodyNode loopBodyNode):
                     break;
                 case(ReturnNode returnNode):
                     break;
                 case(ExitNode exitNode):
+                    exitStatement = true;
                     break;
                 case(PrintNode printNode):
                     Debug.Log("Im interpreting print");

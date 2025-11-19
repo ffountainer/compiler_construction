@@ -22,7 +22,7 @@ public class ReferenceInterpreter : Interpretable
         {
             case(WhatReference.Ident):
                 Debug.Log("The reference is by ident");
-                ExpressionNode expr = Interpreter.GetIdentifiers()[referenceIdent];
+                ExpressionNode expr = FindExpression(referenceIdent);
                 if (expr == null && !isTypeCheck)
                 {
                     throw new InterpretationException(
@@ -39,7 +39,7 @@ public class ReferenceInterpreter : Interpretable
                 break;
             case(WhatReference.Array):
                 Debug.Log("The reference is by array element");
-                ExpressionNode referencedArray = Interpreter.GetIdentifiers()[referenceIdent];
+                ExpressionNode referencedArray = FindExpression(referenceIdent);
                 if (referencedArray == null)
                 {
                     throw new InterpretationException(
@@ -61,7 +61,7 @@ public class ReferenceInterpreter : Interpretable
                 break;
             case(WhatReference.Tuple):
                 Debug.Log("The reference is by tuple");
-                ExpressionNode referencedTuple = Interpreter.GetIdentifiers()[referenceIdent];
+                ExpressionNode referencedTuple = FindExpression(referenceIdent);
                 if (referencedTuple == null)
                 {
                     throw new InterpretationException(

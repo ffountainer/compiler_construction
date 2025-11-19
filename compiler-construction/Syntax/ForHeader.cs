@@ -22,7 +22,9 @@ public class ForHeader : TreeNode
         // If found the in keyword, then store ident first
         if (inToken is In)
         {
-            children.Add(NodeFactory.ConstructNode(new IdentifierNode(), lexer, token));
+            var ident = NodeFactory.ConstructNode(new IdentifierNode(), lexer, token);
+            children.Add(ident);
+            SyntaxAnalyzer.AddToCurScope(ident.GetValue(), true);
             
             // Construct the expression that follows and store it
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));

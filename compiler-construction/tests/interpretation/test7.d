@@ -1,5 +1,5 @@
 var x := 0
-while x < 3 loop
+while x < 5 loop
         print "x is small!"
         x := x + 1
         if x = 3 then 

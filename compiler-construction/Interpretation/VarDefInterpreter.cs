@@ -23,8 +23,8 @@ public class VarDefInterpreter : Interpretable
             expression = (ExpressionNode)_definition.GetChildren().Skip(1).First();
         }
         
-        if (expression != null) Interpreter.AddIdentifier(identifier, expression);
-        else Interpreter.AddIdentifier(identifier);
+        if (expression != null) AddIdentifier(identifier, expression);
+        else AddIdentifier(identifier);
         
     }
 }

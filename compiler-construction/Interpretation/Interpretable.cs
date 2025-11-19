@@ -19,6 +19,70 @@ public abstract class Interpretable
     protected ExpressionNode bracedExpr;
     protected List<TreeNode> children = new List<TreeNode>();
     protected static bool isAssignment = false;
+
+    protected static InterpretationScope currentScope;
+    protected static InterpretationScope parentScope;
+
+    public ExpressionNode FindExpression(IdentifierNode key)
+    {
+        var current = currentScope;
+        var parent =  currentScope.GetParentScope();
+
+        do
+        {
+            if (current.GetCurrentScope()[key] != null)
+            {
+                return current.GetCurrentScope()[key];
+            }
+            else
+            {
+                current = parent;
+                parent = parent?.GetParentScope();
+            }
+        } while(parent != null);
+
+        return null;
+    }
+
+    public Dictionary<IdentifierNode, ExpressionNode?> GetIdentifiers()
+    {
+        return currentScope.GetCurrentScope();
+    }
+    
+    public void AddIdentifier(IdentifierNode identifier, ExpressionNode expression = null)
+    {
+        currentScope.AddIdentifier(identifier, expression);
+    }
+    
+    public void SetIdentifier(IdentifierNode identifier, ExpressionNode expression)
+    {
+        currentScope.SetIdentifier(identifier, expression);
+    }
+
+    public void SetNewScope()
+    {
+        parentScope = currentScope;
+        currentScope = new InterpretationScope(new Dictionary<IdentifierNode, ExpressionNode?>(), parentScope);
+    }
+
+    public void returnPrevScope()
+    {
+        currentScope = parentScope;
+        parentScope = currentScope.GetParentScope();
+    }
+        
+    protected static bool exitStatement = false;
+    protected static bool isLoop = false;
+    
+    public bool GetExitStatement()
+    {
+        return exitStatement;
+    }
+    
+    public bool GetIsLoop()
+    {
+        return isLoop;
+    }
     
     public bool GetIsAssignment() => isAssignment;
     
@@ -111,6 +175,47 @@ public abstract class Interpretable
         
         ExpressionNode nullExpr = (ExpressionNode)new ExpressionNode().AddChild(node);
         return nullExpr;
+    }
+    
+    public  ExpressionNode ConstructLiteralExpr(object value, WhatExpression what)
+    {
+        TreeNode node;
+        switch (what)
+        {
+            case (WhatExpression.IntegerExpr):
+                node = new IntegerLiteral().WithValue((int)value);
+                break;
+            case (WhatExpression.RealExpr):
+                node = new RealLiteral().WithValue((double)value);
+                break;
+            case (WhatExpression.StringExpr):
+                node = new StringLiteral().WithValue((string)value);
+                break;
+            case (WhatExpression.BoolExpr):
+                node = new BooleanLiteral().WithValue((bool)value);
+                break;
+            case (WhatExpression.NoneExpr):
+                node = new NoneLiteral();
+                break;
+            case (WhatExpression.ArrayExpr):
+                node = new ArrayNode().WithValue((List<ExpressionNode>)value);
+                break;
+            case (WhatExpression.TupleExpr):
+                node = new TupleNode().WithValue((List<TupleElementNode>)value);
+                break;
+            default:
+                throw new InterpretationException("Cannot build a helper expression with " + what.ToString());
+        }
+        
+        node = new LiteralNode().AddChild(node);
+        node = new PrimaryNode().AddChild(node);
+        node = new UnaryNode().AddChild(node);
+        node = new TermNode().AddChild(node);
+        node = new FactorNode().AddChild(node);
+        node = new RelationNode().AddChild(node);
+        
+        ExpressionNode expr = (ExpressionNode)new ExpressionNode().AddChild(node);
+        return expr;
     }
     
     public  ExpressionNode ConstructExpressionFromExprInterpreter(ExpressionInterpreter expressionInterpreter)

@@ -24,11 +24,13 @@ public class AssignmentInterpreter : Interpretable
         if (reference.getWhatReference() is WhatReference.Ident)
         {
             Debug.Log("The reference is by ident");
-            if (Interpreter.GetIdentifiers()[reference.GetIdentifier()] == null)
+            if (FindExpression(reference.GetIdentifier()) == null)
             {
-                throw new InterpretationException($"Interpreter: no identifier {reference.GetIdentifier().GetValue()} is found");
+                throw new InterpretationException(
+                    $"Interpreter: no identifier {reference.GetIdentifier().GetValue()} is found");
             }
-            Interpreter.SetIdentifier(reference.GetIdentifier(), calculatedExpression);
+
+            SetIdentifier(reference.GetIdentifier(), calculatedExpression);
         }
         // example:
         // var tuple := {a := 3, b, 4}
@@ -39,12 +41,12 @@ public class AssignmentInterpreter : Interpretable
             // tuple
             IdentifierNode tupleName = (IdentifierNode)reference.GetChildren().First();
             Debug.Log($"Trying to assign to tuple with name {tupleName.GetValue()}");
-            if (Interpreter.GetIdentifiers()[tupleName] == null)
+            if (FindExpression(tupleName) == null)
             {
                 throw new InterpretationException($"Interpreter: no tuple called {tupleName.GetValue()} is found");
             }
 
-            ExpressionNode tupleExpression = Interpreter.GetIdentifiers()[tupleName];
+            ExpressionNode tupleExpression = FindExpression(tupleName);
             ExpressionInterpreter interpreter = new ExpressionInterpreter(tupleExpression);
             Debug.Log("Now i will interpret an expression for the tupleValue in Identifiers list");
             interpreter.Interpret();
@@ -96,7 +98,7 @@ public class AssignmentInterpreter : Interpretable
                 
                 newChildren.Add(node);
                 
-                Interpreter.SetIdentifier(reference.GetIdentifier(), (new ExpressionNode(newTuple, newChildren)));
+                SetIdentifier(reference.GetIdentifier(), (new ExpressionNode(newTuple, newChildren)));
             }
 
             if (tupleElement.GetWhatTupleReference() is WhatTupleReference.TupleByIndex)
@@ -136,18 +138,18 @@ public class AssignmentInterpreter : Interpretable
                 
                 newChildren.Add(node);
                 
-                Interpreter.SetIdentifier(reference.GetIdentifier(), (new ExpressionNode(newTuple, newChildren)));
+                SetIdentifier(reference.GetIdentifier(), (new ExpressionNode(newTuple, newChildren)));
             }
         }
         else if (reference.getWhatReference() is WhatReference.Array)
         {
             IdentifierNode arrayName = (IdentifierNode)reference.GetChildren().First();
-            if (Interpreter.GetIdentifiers()[arrayName] == null)
+            if (FindExpression(arrayName) == null)
             {
                 throw new InterpretationException($"Interpreter: no array called {arrayName.GetValue()} is found");
             }
 
-            ExpressionNode arrayExpression = Interpreter.GetIdentifiers()[arrayName];
+            ExpressionNode arrayExpression = FindExpression(arrayName);
             ExpressionInterpreter interpreter = new ExpressionInterpreter(arrayExpression);
             List<TreeNode> newChildren = new List<TreeNode>();
             interpreter.Interpret();
@@ -205,7 +207,7 @@ public class AssignmentInterpreter : Interpretable
                 
             newChildren.Add(node);
             
-            Interpreter.SetIdentifier(reference.GetIdentifier(), (new ExpressionNode(newArray,  newChildren)));
+            SetIdentifier(reference.GetIdentifier(), (new ExpressionNode(newArray,  newChildren)));
         }
         else if (reference.getWhatReference() is WhatReference.Call)
         {

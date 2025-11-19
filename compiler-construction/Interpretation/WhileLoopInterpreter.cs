@@ -13,6 +13,7 @@ public class WhileLoopInterpreter : Interpretable
     }
     public override void Interpret()
     {
+        isLoop = true;
         Debug.Log("Im beginning to interpret while loop");
         ExpressionNode expression = (ExpressionNode)children.First();
         ExpressionInterpreter expressionInterpreter = new ExpressionInterpreter(expression);
@@ -29,6 +30,10 @@ public class WhileLoopInterpreter : Interpretable
             ExpressionInterpreter updateInterpreter = new ExpressionInterpreter(expression);
             updateInterpreter.Interpret();
             isSatisfied = updateInterpreter.GetBoolValue();
+            if (bodyInterpreter.GetExitStatement()) isSatisfied = false;
         }
+
+        isLoop = false;
+        exitStatement = false;
     }
 }
