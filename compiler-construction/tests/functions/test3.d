@@ -8,3 +8,4 @@ var checkIfTwoRexes := func(x) is
 
 var res := checkIfTwoRexes(2)
 var res2 := checkIfTwoRexes(4)
+print res, res2

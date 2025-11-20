@@ -8,3 +8,4 @@ end
 
 var res := checkIfTwoRexes(2)
 var res2 := checkIfTwoRexes(4)
+print res, res2

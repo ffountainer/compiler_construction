@@ -35,7 +35,7 @@ public class FunctionInterpreter : Interpretable
             {
                 StatementInterpreter statementInterpreter = new StatementInterpreter(statement);
                 statementInterpreter.Interpret();
-                if (statement.GetChildren().Count > 0 && statement.GetChildren().First() is ReturnNode)
+                if (statement.GetChildren().Count > 0 && statement.GetChildren().First() is ReturnNode || returnStatement)
                 {
                     ExpressionInterpreter returnInterpreter = new ExpressionInterpreter(returnValue);
                     returnInterpreter.Interpret();

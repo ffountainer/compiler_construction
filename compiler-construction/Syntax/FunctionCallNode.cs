@@ -16,6 +16,11 @@ public class FunctionCallNode : TreeNode
         do
         {
             var token =  lexer.GetNextToken();
+            if (token is RightBrace)
+            {
+                lastToken = token;
+                break;
+            }
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, token, out lastToken));
         } while (lastToken is Comma);
 

@@ -55,7 +55,19 @@ public class StatementInterpreter : Interpretable
                 case (LoopBodyNode loopBodyNode):
                     Debug.Log("Im interpreting loop body:");
                     var body = new BodyInterpreter((BodyNode)loopBodyNode.GetChildren().First());
-                    body.Interpret();
+                    if (!isLoop)
+                    {
+                        SetNewScope();
+                        do
+                        {
+                            body.Interpret();
+                        } while (!exitStatement);
+                        returnPrevScope();
+                    }
+                    else
+                    {
+                        body.Interpret();
+                    }
                     break;
                 case(ReturnNode returnNode):
                     returnStatement = true;

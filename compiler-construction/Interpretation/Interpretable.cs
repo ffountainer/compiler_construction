@@ -39,26 +39,34 @@ public abstract class Interpretable
     {
         var current = currentScope;
         var parent =  currentScope.GetParentScope();
-
         do
         {
-            if (current.GetCurrentScope()[key] != null)
+            for (int i = 0; i < current.GetCurrentScope().Count; i++)
             {
-                return current.GetCurrentScope()[key];
+                if (current.GetCurrentScope().Keys.ElementAt(i).GetValue().Equals(key.GetValue()))
+                {
+                    return current.GetCurrentScope().Values.ElementAt(i);
+                }
             }
-            else
-            {
-                current = parent;
-                parent = parent?.GetParentScope();
-            }
-        } while(parent != null);
+
+            current = parent;
+            parent = parent?.GetParentScope();
+
+        } while (current != null);
 
         return null;
     }
+    
+    
 
     public Dictionary<IdentifierNode, ExpressionNode?> GetIdentifiers()
     {
         return currentScope.GetCurrentScope();
+    }
+
+    public void DeleteIdentifier(IdentifierNode identifier)
+    {
+        currentScope.DeleteIdentifier(identifier);
     }
     
     public void AddIdentifier(IdentifierNode identifier, ExpressionNode expression = null)
@@ -68,7 +76,23 @@ public abstract class Interpretable
     
     public void SetIdentifier(IdentifierNode identifier, ExpressionNode expression)
     {
-        currentScope.SetIdentifier(identifier, expression);
+        var current = currentScope;
+        var parent =  currentScope.GetParentScope();
+        do
+        {
+            for (int i = 0; i < current.GetCurrentScope().Count; i++)
+            {
+                if (current.GetCurrentScope().Keys.ElementAt(i).GetValue().Equals(identifier.GetValue()))
+                {
+                    current.SetIdentifier(identifier, expression);
+                    return;
+                }
+            }
+
+            current = parent;
+            parent = parent?.GetParentScope();
+
+        } while (current != null);
     }
 
     public void SetNewScope()
@@ -189,7 +213,7 @@ public abstract class Interpretable
         return nullExpr;
     }
     
-    public  ExpressionNode ConstructLiteralExpr(object value, WhatExpression what)
+    public ExpressionNode ConstructLiteralExpr(object value, WhatExpression what)
     {
         TreeNode node;
         switch (what)

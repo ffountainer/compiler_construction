@@ -23,6 +23,7 @@ public class WhileLoopInterpreter : Interpretable
         
         while (isSatisfied)
         {
+            SetNewScope();
             BodyNode body = (BodyNode)children.Last().GetChildren().First();
             BodyInterpreter bodyInterpreter = new BodyInterpreter(body);
             bodyInterpreter.Interpret();
@@ -31,6 +32,7 @@ public class WhileLoopInterpreter : Interpretable
             updateInterpreter.Interpret();
             isSatisfied = updateInterpreter.GetBoolValue();
             if (bodyInterpreter.GetExitStatement()) isSatisfied = false;
+            returnPrevScope();
         }
 
         isLoop = false;

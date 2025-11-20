@@ -24,11 +24,6 @@ public class AssignmentInterpreter : Interpretable
         if (reference.getWhatReference() is WhatReference.Ident)
         {
             Debug.Log("The reference is by ident");
-            if (FindExpression(reference.GetIdentifier()) == null)
-            {
-                throw new InterpretationException(
-                    $"Interpreter: no identifier {reference.GetIdentifier().GetValue()} is found");
-            }
 
             SetIdentifier(reference.GetIdentifier(), calculatedExpression);
         }

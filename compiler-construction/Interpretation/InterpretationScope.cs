@@ -28,6 +28,11 @@ public class InterpretationScope
     {
         currentScope.Add(identifier, expression);
     }
+
+    public void DeleteIdentifier(IdentifierNode identifier)
+    {
+        currentScope.Remove(identifier);
+    }
     
     public void SetIdentifier(IdentifierNode identifier, ExpressionNode expression)
     {

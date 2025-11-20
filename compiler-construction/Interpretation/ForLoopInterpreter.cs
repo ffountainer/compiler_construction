@@ -13,16 +13,16 @@ public class ForLoopInterpreter : Interpretable
     }
     public override void Interpret()
     {
+        SetNewScope();
         isLoop = true;
         Debug.Log("Im beginning to interpret for loop");
         bool hasForHeader = (children.Count > 1);
-
+        
         BodyNode loopBodyNode = (BodyNode)children.Last().GetChildren()[0];
         BodyInterpreter bodyInterpreter = new BodyInterpreter(loopBodyNode);
 
         if (hasForHeader)
         {
-            SetNewScope();
             ForHeader forHeader = (ForHeader)children.First();
             List<TreeNode> forHeaderChildren = forHeader.GetChildren();
             
@@ -43,16 +43,16 @@ public class ForLoopInterpreter : Interpretable
             if (forHeaderChildren.Count == 2)
             {
                 // lower bound and higher bound
-                if (forHeaderChildren is ExpressionNode)
+                if (forHeaderChildren.First() is ExpressionNode)
                 {
-                    ExpressionNode boundLow = (ExpressionNode)forHeaderChildren[1];
+                    ExpressionNode boundLow = (ExpressionNode)forHeaderChildren[0];
                     ExpressionInterpreter boundLowInterpreter = new ExpressionInterpreter(boundLow);
                     boundLowInterpreter.Interpret();
                     int lowBoundary = boundLowInterpreter.GetIntValue();
 
-                    ExpressionNode boundHigh = (ExpressionNode)forHeaderChildren[2];
-                    ExpressionInterpreter boundHighInterpreter = new ExpressionInterpreter(boundLow);
-                    boundLowInterpreter.Interpret();
+                    ExpressionNode boundHigh = (ExpressionNode)forHeaderChildren[1];
+                    ExpressionInterpreter boundHighInterpreter = new ExpressionInterpreter(boundHigh);
+                    boundHighInterpreter.Interpret();
                     int highBoundary = boundHighInterpreter.GetIntValue();
 
                     for (int i = lowBoundary; i < highBoundary; i++)
@@ -70,16 +70,44 @@ public class ForLoopInterpreter : Interpretable
                     ExpressionNode boundHigh = (ExpressionNode)forHeaderChildren[1];
                     ExpressionInterpreter boundHighInterpreter = new ExpressionInterpreter(boundHigh);
                     boundHighInterpreter.Interpret();
-                    int highBoundary = boundHighInterpreter.GetIntValue();
-                
-                    for (int i = 0; i < highBoundary; i++)
+
+                    if (boundHighInterpreter.GetWhatExpression() is WhatExpression.IntegerExpr)
                     {
-                        bodyInterpreter.Interpret();
-                        ExpressionInterpreter oldValue = new ExpressionInterpreter(value);
-                        oldValue.Interpret();
-                        value = ConstructLiteralExpr(oldValue.GetIntValue() + 1, WhatExpression.IntegerExpr);
-                        SetIdentifier(forHeaderIdentifier, value);
+                        int highBoundary = boundHighInterpreter.GetIntValue();
+
+                        for (int i = 0; i < highBoundary; i++)
+                        {
+                            bodyInterpreter.Interpret();
+                            ExpressionInterpreter oldValue = new ExpressionInterpreter(value);
+                            oldValue.Interpret();
+                            value = ConstructLiteralExpr(oldValue.GetIntValue() + 1, WhatExpression.IntegerExpr);
+                            SetIdentifier(forHeaderIdentifier, value);
+                        }
                     }
+
+                    if (boundHighInterpreter.GetWhatExpression() is WhatExpression.StringExpr)
+                    {
+                        string traverse = boundHighInterpreter.GetStringValue();
+                        Console.WriteLine(traverse);
+                        foreach (char c in traverse.Substring(1,  traverse.Length - 2))
+                        {
+                            value = ConstructLiteralExpr(c.ToString(), WhatExpression.StringExpr);
+                            SetIdentifier(forHeaderIdentifier, value);
+                            bodyInterpreter.Interpret();
+                        }
+                    }
+                    
+                    if (boundHighInterpreter.GetWhatExpression() is WhatExpression.ArrayExpr)
+                    {
+                        List<ExpressionNode> array = boundHighInterpreter.GetArrayValue();
+
+                        foreach (ExpressionNode node in array)
+                        {
+                            SetIdentifier(forHeaderIdentifier, node);
+                            bodyInterpreter.Interpret();
+                        }
+                    }
+                    
                 }
             }
             
@@ -110,17 +138,10 @@ public class ForLoopInterpreter : Interpretable
                 }
             }
             exitStatement = false;
-            returnPrevScope();
-        }
-        else
-        {
-            while (true)
-            {
-                bodyInterpreter.Interpret();
-            }
         }
         
         isLoop = false;
         exitStatement = false;
+        returnPrevScope();
     }
 }

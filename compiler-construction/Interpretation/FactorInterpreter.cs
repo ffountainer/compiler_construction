@@ -149,11 +149,23 @@ public class FactorInterpreter : Interpretable
                         throw new InterpretationException("Interpretation: operator '-' cannot be applied to tuples");
                     }
                 }
-
+                
+                List<String> allKeys = new List<string>();
                 foreach (TermInterpreter termInterpreter in termInterpreters)
                 {
                     List<TupleElementNode> newTuple = termInterpreter.GetTupleValue();
                     concatenatedTuple.AddRange(newTuple);
+                    foreach (TupleElementNode val in newTuple)
+                    {
+                        if (val.key != null)
+                        {
+                            if (allKeys.Contains(val.key.GetValue()))
+                            {
+                                throw new InterpretationException("Cannot concatenate tuples with the same key");
+                            }
+                            allKeys.Add(val.key.GetValue());
+                        }
+                    }
                 }
                 List<TreeNode> newChildren = new List<TreeNode>();
                 TupleValue = concatenatedTuple;
