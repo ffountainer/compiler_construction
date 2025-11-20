@@ -160,7 +160,7 @@ public class ExpressionInterpreter : Interpretable
                                 innerElementTupleInterpreter.Interpret();
                                 if (key != null)
                                 {
-                                    Console.Write(key.GetValue() + ": ");
+                                    Console.Write(key.GetValue() + ":");
                                 }
                                 innerElementTupleInterpreter.PrintExpression();
                             }

@@ -46,7 +46,7 @@ class SyntaxAnalyzer
     {
         var program = NodeFactory.ConstructNode(new ProgramNode(), _lexer, _lexer.GetNextToken());
         _program = program;
-        program.PrintTree();
+        // program.PrintTree();
     }
 
     public ProgramNode GetTree()

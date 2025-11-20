@@ -11,7 +11,13 @@ class Program
     
     private static void Main(string[] args)
     {
-        string path = "../../../tests/interpretation/test1.d";
+        // tests review
+        // declarations/assignments/prints: 1, 2, 3, 4
+        // concatenation: 5
+        // if statements: 6
+        // loops: 7, 8, 9, 12
+        // functions: 10, 11
+        string path = "../../../tests/interpretation/test12.d";
         // string path = "../../../tests/semantics/scopes/test6.d";
         Debug.Log("Hello World!");
 
