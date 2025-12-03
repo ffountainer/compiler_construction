@@ -171,7 +171,7 @@ public class AssignmentInterpreter : Interpretable
                 int initialCount = initialArray.Count;
                 for (int i = 0; i < (index - initialCount + 1); i++)
                 {
-                    initialArray.Add(ConstructNullExprArray());
+                    initialArray.Add(ConstructNullExprArrayElement());
                 }
             }
 

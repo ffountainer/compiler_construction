@@ -146,7 +146,14 @@ public class ExpressionInterpreter : Interpretable
                             {
                                 ExpressionInterpreter innerElementArrayInterpreter = new ExpressionInterpreter(innerElementArray);
                                 innerElementArrayInterpreter.Interpret();
-                                innerElementArrayInterpreter.PrintExpression();
+                                if (innerElementArrayInterpreter.GetWhatExpression() == WhatExpression.NoneExpr)
+                                {
+                                    Console.Write("none ");
+                                }
+                                else
+                                {
+                                    innerElementArrayInterpreter.PrintExpression();
+                                }
                             }
                             Console.Write("] ");
                             break;
@@ -167,7 +174,8 @@ public class ExpressionInterpreter : Interpretable
                             Console.Write("} ");
                             break;
                         case(WhatExpression.NoneExpr):
-                            throw new InterpretationException("Cannot print a none value");
+                            Console.Write("none ");
+                            break;
                         case(WhatExpression.FuncLiteralExpr):
                             throw new InterpretationException("Cannot print a function literal");
                         default:

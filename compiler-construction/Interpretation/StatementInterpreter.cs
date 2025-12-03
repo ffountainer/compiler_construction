@@ -62,6 +62,8 @@ public class StatementInterpreter : Interpretable
                         {
                             body.Interpret();
                         } while (!exitStatement);
+
+                        exitStatement = false;
                         returnPrevScope();
                     }
                     else

@@ -7,3 +7,12 @@ while x < 5 loop
             exit
         end
     end
+    
+var a := ["awesome", "pretty", "really", "are", "dinosaurs"]
+var n := 5
+var e := []
+for i in 1..n+1 loop
+    e[n-i+1] := a[i]
+end
+
+print e

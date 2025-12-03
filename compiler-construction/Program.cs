@@ -17,12 +17,11 @@ class Program
         // if statements: 6
         // loops: 7, 8, 9, 12
         // functions: 10, 11
-        string path = "../../../tests/interpretation/test1.d";
-        // string path = "../../../tests/semantics/scopes/test6.d";
+        string path = "../../../tests/interpretation/test13.d";
         Debug.Log("Hello World!");
 
-        // LexerShowcase(path);
-        // SyntaxAnalyzerShowcase(path);
+        LexerShowcase(path);
+        SyntaxAnalyzerShowcase(path);
         InterpreterShowcase(path);
     }
 
@@ -49,7 +48,6 @@ class Program
         
         var lexer = new Lexer(path, streamReader);
         var analyzer = new SyntaxAnalyzer(lexer);
-        analyzer.PrintAST();
         
         streamReader.Close();
         filestream.Close();
@@ -63,7 +61,7 @@ class Program
         var lexer = new Lexer(path, streamReader);
         var analyzer = new SyntaxAnalyzer(lexer);
         analyzer.PrintAST();
-
+        
         Console.WriteLine("Interpretation:");
         var interpreter = new Interpreter(analyzer.GetTree());
         interpreter.Interpret();
