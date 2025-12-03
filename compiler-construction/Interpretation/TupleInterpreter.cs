@@ -19,7 +19,9 @@ public class TupleInterpreter : Interpretable
         {
             var ident = tupleElement.key;
             var expr = tupleElement.value;
-            TupleValue.Add(new TupleElementNode(ident, expr, tupleElement.GetChildren()));
+            ExpressionInterpreter expressionInterpreter = new ExpressionInterpreter(expr);
+            expressionInterpreter.Interpret();
+            TupleValue.Add(new TupleElementNode(ident, ConstructExpressionFromExprInterpreter(expressionInterpreter), tupleElement.GetChildren()));
         }
     }
 }

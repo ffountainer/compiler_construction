@@ -17,7 +17,9 @@ public class ArrayInterpreter : Interpretable
         WhatExpr = WhatExpression.ArrayExpr;
         foreach (var expr in _array.GetChildren())
         {
-            ArrayValue.Add((ExpressionNode)expr);
+            ExpressionInterpreter expressionInterpreter = new ExpressionInterpreter((ExpressionNode)expr);
+            expressionInterpreter.Interpret();
+            ArrayValue.Add(ConstructExpressionFromExprInterpreter(expressionInterpreter));
         }
     }
 }
