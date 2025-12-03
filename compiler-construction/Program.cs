@@ -1,7 +1,4 @@
-﻿using compiler_construction.Syntax;
-
-namespace compiler_construction;
-
+﻿namespace compiler_construction;
 using Tokenization;
 
 class Program
@@ -17,11 +14,12 @@ class Program
         // if statements: 6
         // loops: 7, 8, 9, 12
         // functions: 10, 11
+        // empty test 14 where you can put your code
         string path = "../../../tests/interpretation/test13.d";
         Debug.Log("Hello World!");
 
-        LexerShowcase(path);
-        SyntaxAnalyzerShowcase(path);
+        //LexerShowcase(path);
+        //SyntaxAnalyzerShowcase(path);
         InterpreterShowcase(path);
     }
 
@@ -48,6 +46,8 @@ class Program
         
         var lexer = new Lexer(path, streamReader);
         var analyzer = new SyntaxAnalyzer(lexer);
+        analyzer.ConstructAST();
+        analyzer.PrintAST();
         
         streamReader.Close();
         filestream.Close();
@@ -60,7 +60,7 @@ class Program
         
         var lexer = new Lexer(path, streamReader);
         var analyzer = new SyntaxAnalyzer(lexer);
-        analyzer.PrintAST();
+        analyzer.ConstructAST();
         
         Console.WriteLine("Interpretation:");
         var interpreter = new Interpreter(analyzer.GetTree());

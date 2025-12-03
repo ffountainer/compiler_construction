@@ -9,11 +9,11 @@ public class Interpreter : Interpretable
     public Interpreter(ProgramNode program)
     {
         _program = program;
+        currentScope = new InterpretationScope(new Dictionary<IdentifierNode, ExpressionNode?>(), null);
     }
 
     public override void Interpret()
     {
-        currentScope = new InterpretationScope(new Dictionary<IdentifierNode, ExpressionNode?>(), null);
         parentScope = null;
         int i = 0;
         foreach (StatementNode child in _program.GetChildren())

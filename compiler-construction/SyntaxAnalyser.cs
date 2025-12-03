@@ -15,6 +15,7 @@ class SyntaxAnalyzer
     public SyntaxAnalyzer(Lexer lexer)
     {
         this._lexer = lexer;
+        currentScope = new Scope(new Hashtable(), null);
     }
     
     public static void AddToCurScope(String key, bool isDefined)
@@ -44,9 +45,13 @@ class SyntaxAnalyzer
 
     public void PrintAST()
     {
+        _program.PrintTree();
+    }
+
+    public void ConstructAST()
+    {
         var program = NodeFactory.ConstructNode(new ProgramNode(), _lexer, _lexer.GetNextToken());
         _program = program;
-        program.PrintTree();
     }
 
     public ProgramNode GetTree()
