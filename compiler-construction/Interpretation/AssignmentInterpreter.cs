@@ -24,7 +24,7 @@ public class AssignmentInterpreter : Interpretable
         if (reference.getWhatReference() is WhatReference.Ident)
         {
             Debug.Log("The reference is by ident");
-
+            InheritValues(expressionInterpreter, "Error inheriting from the expression");
             SetIdentifier(reference.GetIdentifier(), calculatedExpression);
         }
         // example:

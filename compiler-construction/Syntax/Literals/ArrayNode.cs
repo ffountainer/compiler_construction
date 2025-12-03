@@ -48,6 +48,7 @@ public class ArrayNode : TreeNode
     public ArrayNode WithValue(List<ExpressionNode> value)
     {
         Value = value;
+        children = value.Cast<TreeNode>().ToList();
         return this;
     }
 }

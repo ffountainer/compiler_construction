@@ -17,7 +17,7 @@ class Program
         // if statements: 6
         // loops: 7, 8, 9, 12
         // functions: 10, 11
-        string path = "../../../tests/interpretation/test12.d";
+        string path = "../../../tests/interpretation/test10.d";
         // string path = "../../../tests/semantics/scopes/test6.d";
         Debug.Log("Hello World!");
 

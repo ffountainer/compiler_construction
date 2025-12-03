@@ -60,6 +60,7 @@ public class TupleNode : TreeNode
     public TupleNode WithValue(List<TupleElementNode> value)
     {
         Elements = value;
+        children = value.Cast<TreeNode>().ToList();
         return this;
     }
 }
