@@ -62,6 +62,6 @@ public class FunBodyNode : TreeNode
         {
             throw new UnexpectedTokenException($"Expected => or is to start func definition but got {firstToken}");
         }
-        SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetCurrentScope().GetParentScope());
+        SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetParentScope());
     }
 }

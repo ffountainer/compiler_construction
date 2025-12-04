@@ -37,13 +37,15 @@ public class VariableDefinitionNode : TreeNode
         if (lastToken is ColonEqual)
         {
             isDefined = true;
+            SyntaxAnalyzer.AddToCurScope(firstToken.GetSourceText(), isDefined);
             Debug.Log("Got colon equal in var def, construct expr");
             children.Add(NodeFactory.ConstructNode(new ExpressionNode(), lexer, lexer.GetNextToken(), out lastToken));
             Debug.Log($"Var def got {lastToken.GetSourceText()} as last token out of expression");
         }
-
-        SyntaxAnalyzer.AddToCurScope(firstToken.GetSourceText(), isDefined);
-        
+        else
+        {
+            SyntaxAnalyzer.AddToCurScope(firstToken.GetSourceText(), isDefined);
+        }
 
     }
 }

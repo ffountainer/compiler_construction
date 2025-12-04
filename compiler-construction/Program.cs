@@ -16,10 +16,11 @@ class Program
         // functions: 10, 11
         // empty test 14 where you can put your code
         string path = "../../../tests/interpretation/test13.d";
+        //string path = "../../../tests/semantics/optimisations/constants/test1.d";
         Debug.Log("Hello World!");
 
         //LexerShowcase(path);
-        //SyntaxAnalyzerShowcase(path);
+        SyntaxAnalyzerShowcase(path);
         InterpreterShowcase(path);
     }
 
@@ -41,6 +42,7 @@ class Program
 
     private static void SyntaxAnalyzerShowcase(string path)
     {
+        Console.WriteLine("AST:");
         var filestream = new FileStream(path, FileMode.Open);
         var streamReader = new StreamReader(filestream);
         

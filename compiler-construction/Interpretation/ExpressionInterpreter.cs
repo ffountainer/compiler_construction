@@ -62,6 +62,7 @@ public class ExpressionInterpreter : Interpretable
             }
             
             opIndex = GetOperatorIndex(typeof(And));
+            
             while (opIndex != -1)
             {
                 operandValues[opIndex] = operandValues[opIndex] && operandValues[opIndex + 1];
@@ -87,6 +88,7 @@ public class ExpressionInterpreter : Interpretable
             }
             
             BoolValue = operandValues[0];
+            
             WhatExpr = WhatExpression.BoolExpr;
         }
     }

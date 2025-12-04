@@ -32,7 +32,7 @@ public class LoopBodyNode : TreeNode
         IsLoop = false;
         if (!IsForLoop && !IsWhileLoop)
         {
-            SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetCurrentScope().GetParentScope());
+            SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetParentScope());
         }
     }
 }

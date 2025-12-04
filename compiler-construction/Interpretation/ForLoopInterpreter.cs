@@ -121,6 +121,7 @@ public class ForLoopInterpreter : Interpretable
                 int lowBoundary = boundLowInterpreter.GetIntValue();
                 
                 ExpressionNode value = ConstructLiteralExpr(lowBoundary, WhatExpression.IntegerExpr);
+                
                 AddIdentifier(forHeaderIdentifier, value);
                 
                 ExpressionNode boundHigh = (ExpressionNode)forHeaderChildren[2];

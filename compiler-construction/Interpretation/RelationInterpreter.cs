@@ -67,12 +67,11 @@ public class RelationInterpreter : Interpretable
             
             var lhsValue = lhsInterpreter.GetNumericalValue();
             var rhsValue = rhsInterpreter.GetNumericalValue();
-            
+           
             if (op is Greater) BoolValue =  lhsValue > rhsValue;
             else if (op is Less) BoolValue = lhsValue < rhsValue;
             else if (op is LessEqual) BoolValue = lhsValue <= rhsValue;
             else if (op is GreaterEqual) BoolValue = lhsValue >= rhsValue;
-            
         }
     }
 }

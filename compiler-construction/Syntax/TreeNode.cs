@@ -13,6 +13,7 @@ public abstract class TreeNode
     protected List<TreeNode> children = new List<TreeNode>();
 
     protected static bool IsLoop = false;
+    protected static bool IsInnerLoop = false;
     protected static bool IsFunc = false;
     protected static bool IsAssign = false;
     protected static bool IsForLoop = false;

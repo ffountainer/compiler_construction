@@ -21,6 +21,7 @@ public class ReferenceInterpreter : Interpretable
         switch (_reference.getWhatReference())
         {
             case(WhatReference.Ident):
+                
                 Debug.Log("The reference is by ident");
                 ExpressionNode expr = FindExpression(referenceIdent);
                 if (expr == null && !isTypeCheck)

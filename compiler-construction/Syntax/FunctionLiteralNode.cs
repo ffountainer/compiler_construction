@@ -90,7 +90,7 @@ public class FunctionLiteralNode : TreeNode
         {
             shortFuncExpr = funBody.GetShortFuncExpr();
         }
-        SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetCurrentScope().GetParentScope());
+        SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetParentScope());
         IsFunc = false;
     }
 }

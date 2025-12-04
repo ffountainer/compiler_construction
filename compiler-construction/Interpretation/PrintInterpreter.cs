@@ -19,6 +19,7 @@ public class PrintInterpreter : Interpretable
             ExpressionInterpreter exprInterpreter = new ExpressionInterpreter(node);
             exprInterpreter.Interpret();
             Debug.Log("Finished interpreting expression for the print, now will start printing");
+            
             exprInterpreter.PrintExpression();
         }
         Console.WriteLine();

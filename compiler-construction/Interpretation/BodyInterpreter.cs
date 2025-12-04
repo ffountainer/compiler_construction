@@ -26,6 +26,7 @@ public class BodyInterpreter : Interpretable
             }
             if (exitStatement)
             {
+                InheritValues(statement, "Interpreter: error inheriting statement values while interpreting body");
                 break;
             }
             

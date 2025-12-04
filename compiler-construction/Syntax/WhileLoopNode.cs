@@ -18,7 +18,11 @@ public class WhileLoopNode : TreeNode
     public override void ReadTokens(out Token lastToken)
     {
         // зондре дабалатория
-        
+        bool wasInner = IsInnerLoop;
+        if (IsLoop || IsWhileLoop)
+        {
+            IsInnerLoop = true;
+        }
         IsLoop = true;
         IsWhileLoop = true;
         Scope new_scope = new Scope(new Hashtable(), SyntaxAnalyzer.GetCurrentScope());
@@ -32,9 +36,17 @@ public class WhileLoopNode : TreeNode
         children.Add(expressionNode);
         
         children.Add(NodeFactory.ConstructNode(new LoopBodyNode(), lexer, bodyStart, out lastToken));
+        if (!IsInnerLoop)
+        {
+            IsLoop = false;
+            IsWhileLoop = false;
+        }
+
+        if (!wasInner)
+        {
+            IsInnerLoop = false;
+        }
         
-        IsLoop = false;
-        IsWhileLoop = false;
         SyntaxAnalyzer.SetScope(SyntaxAnalyzer.GetCurrentScope().GetParentScope());
 
         if (expressionNode.IsConst)

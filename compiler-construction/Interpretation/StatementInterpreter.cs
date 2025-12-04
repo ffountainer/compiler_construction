@@ -73,7 +73,9 @@ public class StatementInterpreter : Interpretable
                     break;
                 case(ReturnNode returnNode):
                     returnStatement = true;
-                    returnValue = (ExpressionNode)returnNode.GetChildren().First();
+                    ExpressionInterpreter expressionInterpreter = new ExpressionInterpreter((ExpressionNode)returnNode.GetChildren().First());
+                    expressionInterpreter.Interpret();
+                    returnValue = ConstructExpressionFromExprInterpreter(expressionInterpreter);
                     break;
                 case(ExitNode exitNode):
                     exitStatement = true;

@@ -39,7 +39,9 @@ public class FunctionInterpreter : Interpretable
                 if (statement.GetChildren().Count > 0 && statement.GetChildren().First() is ReturnNode || returnStatement)
                 {
                     ExpressionInterpreter returnInterpreter = new ExpressionInterpreter(returnValue);
+                    
                     returnInterpreter.Interpret();
+                    
                     InheritValues(returnInterpreter, "Error inheriting from function result");
                     break;
                 }
